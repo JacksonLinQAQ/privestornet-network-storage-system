@@ -41,6 +41,7 @@ class SystemConfig:
         '''
             Modify system configuration
         '''
+        self.load_system_config()
         self.system_config[config] = value
         self.save_system_config()
 
@@ -48,6 +49,7 @@ class SystemConfig:
         '''
             Get system configuration
         '''
+        self.load_system_config()
         return self.system_config[config]
 
     def save_system_config(self):
