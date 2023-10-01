@@ -60,6 +60,7 @@ class SystemConfig:
 class AccessedUser:
     def __init__(self, ip: str, users: Users):
         self.ip = ip
+        self.path = []
         self.user: User = None
         self.users: Users = users
         self.date = datetime.datetime.now().strftime(r'%Y-%m-%d %H:%M:%S')
