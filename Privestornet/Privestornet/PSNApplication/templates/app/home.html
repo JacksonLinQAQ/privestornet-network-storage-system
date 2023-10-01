@@ -3,5 +3,35 @@
 {% block title %}Privestornet{% endblock %}
 
 {% block body %}
-    
+    <div class="flex h-[90vh] max-xl:h-[81vh] max-lg:h-[86vh] max-sm:h-[83vh] gap-x-[10px] m-2">
+        <div class="bg-white bg-opacity-50 grow-[1] h-[100%] p-4 rounded-2xl max-sm:grow-0">
+            <div class="flex mb-4 gap-x-[18px]">
+                <a class="p-2 max-sm:p-1 max-sm:rounded-lg hover:bg-white hover:bg-opacity-50 rounded-2xl" href="./login?page=home">
+                    <img class="block w-24 h-24 max-sm:h-8 max-sm:w-8" src="{{ url_for('static', filename='images/my-privestornet.png') }}">
+                </a>
+                <div class="max-sm:hidden">
+                    <h2 class="text-[20px] font-medium">{{ config.get_system_config('system-name') }}</h2>
+                    <h3 class="text-[14px]">ID: {{ config.get_system_config('system-id') }}</h3>
+                    <h3 class="text-[14px]">Version: {{ config.get_system_config('system-version') }}</h3>
+                </div>
+            </div>
+            <a class="block text-center rounded-full max-sm:rounded-lg w-full mb-2 p-2 hover:bg-white hover:bg-opacity-50" href="./login?page=home">
+                <img class="inline-block align-middle h-5 w-5" src="{{ url_for('static', filename='images/home.png') }}">
+                <span class="align-middle ml-2 max-sm:hidden">Home</span>
+            </a>
+        </div>
+        <div class="flex bg-white bg-opacity-50 grow-[29] h-[100%] p-4 rounded-2xl">
+            <div class="p-4 mb-2 h-fit bg-white bg-opacity-50 rounded-2xl">
+                <h2 class="text-[20px] max-sm:text-[18px] font-bold mb-2">My Device</h2>
+                <div class="flex mb-4 gap-x-[18px]">
+                    <img class="block w-24 h-24 max-sm:w-16 max-sm:h-16" src="{{ url_for('static', filename='images/my-privestornet.png') }}">
+                    <div>
+                        <h2 class="text-[20px] max-sm:text-[16px] font-medium">{{ config.get_system_config('system-name') }}</h2>
+                        <h3 class="text-[14px] max-sm:text-[12px]">ID: {{ config.get_system_config('system-id') }}</h3>
+                        <h3 class="text-[14px] max-sm:text-[12px]">Version: {{ config.get_system_config('system-version') }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

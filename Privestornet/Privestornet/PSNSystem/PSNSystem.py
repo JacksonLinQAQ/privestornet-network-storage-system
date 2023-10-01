@@ -206,3 +206,15 @@ class System:
         self.users = Users()
         for user in self.accessed_users:
             user.refresh()
+
+    def log(self, ip: str, msg: str):
+        '''
+            Log a message
+        '''
+        print(f'[PSNSYSTEM-LOG] -- [{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}] -- [HOST:{ip}] -- {msg}')
+
+    def error(self, ip: str, msg: str):
+        '''
+            Log an error
+        '''
+        print(f'[PSNSYSTEM-ERROR] -- [{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}] -- [HOST:{ip}] -- {msg}')
