@@ -3,9 +3,9 @@
 {% block title %}Privestornet{% endblock %}
 
 {% block body %}
-    <div class="flex max-sm:flex-col max-sm:gap-x-[30px] max-sm:top-[40%] gap-x-[220px] max-xl:gap-x-[20px] max-lg:gap-x-[20px] absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] h-[300px] max-xl:h-[250px] max-lg:h-[230px] max-sm:h-[200px]">
+    <div class="flex max-sm:flex-col max-sm:top-[60%] gap-x-[220px] max-xl:gap-x-[20px] max-lg:gap-x-[20px] absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] h-[300px] max-xl:h-[250px] max-lg:h-[230px] max-sm:h-[520px]">
         <div class="w-[300px] max-sm:w-[180px] max-xl:w-[250px] max-lg:w-[290px]">
-            <img class="w-auto h-[100%] max-sm:h-[100%]" src="{{ url_for('static', filename='images/logo-03.png') }}">
+            <img class="animate-[zoom-in-out_1s] w-auto h-[100%] max-sm:h-[100%]" src="{{ url_for('static', filename='images/logo-03.png') }}">
         </div>
         <div class="w-[720px] max-lg:w-[420px] max-xl:w-[630px] max-sm:w-[290px]">
             <div class="title leading-[70px] text-[64px] max-lg:text-[36px] max-sm:text-[25.5px] max-xl:text-[56px] font-bold h-[70px] max-sm:h-[56px] max-lg:h-[60px] max-xl:h-[62px] overflow-hidden">
@@ -18,7 +18,7 @@
                 <span class="absolute">Privestornet system cares about your<br>privacy and security</span>
                 <span class="absolute">You can more easily share your photos<br>or files with family or friends</span>
             </div>
-            <a href="./" class="block text-center absolute mt-10 max-sm:w-full bg-[#0B0B0B] text-white w-[160px] p-2 rounded-full duration-300 shadow-md hover:bg-white hover:text-[#00BDE7]">Get Started</a>
+            <a href="./login" class="block text-center absolute mt-10 max-sm:w-full bg-[#0B0B0B] text-white w-[160px] p-2 rounded-full duration-300 shadow-md hover:bg-white hover:text-[#00BDE7]">Get Started</a>
         </div>
     </div>
 
@@ -26,6 +26,17 @@
         :root {
             --title-height: 70px;
             --content-height: 78px;
+        }
+
+        @keyframes zoom-in-out {
+            from {
+                transform: scale(3);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         @media (max-width: 1280px) {

@@ -18,3 +18,11 @@ PSN_SYS = PSNSystem.System()
 def index():
     PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
     return render_template('index/index.html', user=PSN_SYS.find_user(request.remote_addr))
+
+@PSN_APP.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
+        pass
+    elif request.method == 'GET':
+        return render_template('login/login.html', user=PSN_SYS.find_user(request.remote_addr))

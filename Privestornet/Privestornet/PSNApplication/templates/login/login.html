@@ -1,0 +1,66 @@
+{% extends 'root/root.html' %}
+
+{% block title %}Privestornet{% endblock %}
+
+{% block body %}
+    <div class="box flex max-sm:flex-col rounded-xl bg-white bg-opacity-50 p-10 gap-x-[100px] max-xl:gap-x-[50px] max-lg:gap-x-[20px] absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] h-[300px] max-sm:h-[570px]">
+        <div class="w-[360px] max-sm:w-full max-xl:w-[380px] max-lg:w-[400px]">
+            <img class="w-auto h-[100%] max-sm:h-[100%]" src="{{ url_for('static', filename='images/logo-03.png') }}">
+        </div>
+        <div class="w-[100%] animate-[appear_2s]">
+            <form class="flex flex-col">
+                <h2 class="mb-5 max-sm:my-5 text-center font-bold text-[28px]">My Privestornet</h2>
+                <input class="block p-2 m-2 text-center rounded-full focus:border-2 focus:border-[#76d4f5] duration-100 outline-none" type="text" name="username" placeholder="Username">
+                <input class="block p-2 m-2 text-center rounded-full focus:border-2 focus:border-[#76d4f5] duration-100 outline-none" type="password" name="password" placeholder="Password">
+                <input class="block p-2 m-2 text-center rounded-full outline-none bg-[#00BDE7] text-white duration-300 hover:bg-[#76d4f5] hover: hover:cursor-pointer" type="submit" value="Login">
+            </form>
+        </div>
+    </div>
+
+    <style>
+        :root {
+            --box-width: 0px;
+            --box-height: 0px;
+        }
+
+        @keyframes appear {
+            0% {
+                opacity: 0;
+            }
+            90% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes expand {
+            from {
+                opacity: 0;
+                width: 0;
+            }
+            to {
+                opacity: 1;
+                width: var(--box-width);
+            }
+        }
+
+        @media screen and (max-width: 640px) {
+            @keyframes expand {
+                from {
+                    opacity: 0;
+                    height: 0;
+                }
+                to {
+                    opacity: 1;
+                    height: var(--box-height);
+                }
+            }
+        }
+    </style>
+
+    <script>
+        let box = document.querySelector('.box');
+        document.querySelector(':root').style.setProperty('--box-width', String(box.offsetWidth) + 'px');
+        document.querySelector(':root').style.setProperty('--box-height', String(box.offsetHeight) + 'px');
+        box.style.animation = 'expand 1s';
+    </script>
+{% endblock %}
