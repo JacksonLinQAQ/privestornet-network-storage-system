@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <title>{% block title %}{% endblock %}</title>
+        {% block head %}{% endblock %}
+    </head>
+    <body class="bg-gray-200 font-['Helvetica']">
+        <nav class="bg-white bg-opacity-50 p-4 shadow-md">
+            <div class="flex justify-between">
+                <div class="mx-4">
+                    <a href="./">
+                        <img class="w-auto h-6" src="{{ url_for('static', filename='images/logo-02.png') }}">
+                    </a>
+                </div>
+                <div class="mx-4">
+                    <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:ml-2" href="./">
+                        <img class="inline-block align-middle" width="22px" height="22px" src="{{ url_for('static', filename='images/home.png') }}">
+                        <span class="inline-block ml-1 align-middle max-sm:hidden">Home</span>
+                    </a>
+                    <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:ml-2" href="./">
+                        <img class="inline-block align-middle" width="20px" height="20px" src="{{ url_for('static', filename='images/settings.png') }}">
+                        <span class="inline-block ml-1 align-middle max-sm:hidden">Settings</span>
+                    </a>
+                    <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:ml-2" href="./">
+                        <img class="inline-block align-middle" width="20px" height="20px" src="{{ url_for('static', filename='images/login.png') }}">
+                        <span class="inline-block ml-1 align-middle max-sm:hidden">Log In</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        {% block body %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,168 @@
+{
+    "users": {
+        "user": {
+            "username": "user",
+            "password": "pw123",
+            "is-administrator": true,
+            "received-data": [],
+            "personal-data": {
+                "pathsource": "personal",
+                "pathtype": "root",
+                "username": "user",
+                "name": null,
+                "path": "",
+                "fullpath": "./Privestornet/PSNUsers/Users/user",
+                "content": {
+                    "hello": {
+                        "pathsource": "personal",
+                        "pathtype": "folder",
+                        "username": "user",
+                        "name": "hello",
+                        "path": "hello",
+                        "fullpath": "./Privestornet/PSNUsers/Users/user/hello",
+                        "content": {
+                            "test.txt": {
+                                "pathsource": "personal",
+                                "pathtype": "file",
+                                "username": "user",
+                                "name": "test.txt",
+                                "path": "hello/test.txt",
+                                "fullpath": "./Privestornet/PSNUsers/Users/user/hello/test.txt",
+                                "content": null
+                            }
+                        }
+                    },
+                    "test.py": {
+                        "pathsource": "personal",
+                        "pathtype": "file",
+                        "username": "user",
+                        "name": "test.py",
+                        "path": "test.py",
+                        "fullpath": "./Privestornet/PSNUsers/Users/user/test.py",
+                        "content": null
+                    }
+                }
+            },
+            "public-data": {
+                "pathsource": "public",
+                "pathtype": "root",
+                "username": null,
+                "name": null,
+                "path": "",
+                "fullpath": "./Privestornet/PSNUsers/Public",
+                "content": {
+                    "test": {
+                        "pathsource": "public",
+                        "pathtype": "folder",
+                        "username": null,
+                        "name": "test",
+                        "path": "test",
+                        "fullpath": "./Privestornet/PSNUsers/Public/test",
+                        "content": {
+                            "test.txt": {
+                                "pathsource": "public",
+                                "pathtype": "file",
+                                "username": null,
+                                "name": "test.txt",
+                                "path": "test/test.txt",
+                                "fullpath": "./Privestornet/PSNUsers/Public/test/test.txt",
+                                "content": null
+                            }
+                        }
+                    },
+                    "test2.py": {
+                        "pathsource": "public",
+                        "pathtype": "file",
+                        "username": null,
+                        "name": "test2.py",
+                        "path": "test2.py",
+                        "fullpath": "./Privestornet/PSNUsers/Public/test2.py",
+                        "content": null
+                    }
+                }
+            }
+        },
+        "jackson": {
+            "username": "jackson",
+            "password": "123",
+            "is-administrator": false,
+            "received-data": [],
+            "personal-data": {
+                "pathsource": "personal",
+                "pathtype": "root",
+                "username": "jackson",
+                "name": null,
+                "path": "",
+                "fullpath": "./Privestornet/PSNUsers/Users/jackson",
+                "content": {
+                    "hello": {
+                        "pathsource": "personal",
+                        "pathtype": "folder",
+                        "username": "jackson",
+                        "name": "hello",
+                        "path": "hello",
+                        "fullpath": "./Privestornet/PSNUsers/Users/jackson/hello",
+                        "content": {
+                            "test.txt": {
+                                "pathsource": "personal",
+                                "pathtype": "file",
+                                "username": "jackson",
+                                "name": "test.txt",
+                                "path": "hello/test.txt",
+                                "fullpath": "./Privestornet/PSNUsers/Users/jackson/hello/test.txt",
+                                "content": null
+                            }
+                        }
+                    },
+                    "test.py": {
+                        "pathsource": "personal",
+                        "pathtype": "file",
+                        "username": "jackson",
+                        "name": "test.py",
+                        "path": "test.py",
+                        "fullpath": "./Privestornet/PSNUsers/Users/jackson/test.py",
+                        "content": null
+                    }
+                }
+            },
+            "public-data": {
+                "pathsource": "public",
+                "pathtype": "root",
+                "username": null,
+                "name": null,
+                "path": "",
+                "fullpath": "./Privestornet/PSNUsers/Public",
+                "content": {
+                    "test": {
+                        "pathsource": "public",
+                        "pathtype": "folder",
+                        "username": null,
+                        "name": "test",
+                        "path": "test",
+                        "fullpath": "./Privestornet/PSNUsers/Public/test",
+                        "content": {
+                            "test.txt": {
+                                "pathsource": "public",
+                                "pathtype": "file",
+                                "username": null,
+                                "name": "test.txt",
+                                "path": "test/test.txt",
+                                "fullpath": "./Privestornet/PSNUsers/Public/test/test.txt",
+                                "content": null
+                            }
+                        }
+                    },
+                    "test2.py": {
+                        "pathsource": "public",
+                        "pathtype": "file",
+                        "username": null,
+                        "name": "test2.py",
+                        "path": "test2.py",
+                        "fullpath": "./Privestornet/PSNUsers/Public/test2.py",
+                        "content": null
+                    }
+                }
+            }
+        }
+    }
+}

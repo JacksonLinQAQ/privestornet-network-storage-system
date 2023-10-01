@@ -1,0 +1,128 @@
+{% extends 'root/root.html' %}
+
+{% block title %}Privestornet{% endblock %}
+
+{% block body %}
+    <div class="flex max-sm:flex-col max-sm:gap-x-[30px] max-sm:top-[40%] gap-x-[220px] max-xl:gap-x-[20px] max-lg:gap-x-[20px] absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] h-[300px] max-xl:h-[250px] max-lg:h-[230px] max-sm:h-[200px]">
+        <div class="w-[300px] max-sm:w-[180px] max-xl:w-[250px] max-lg:w-[290px]">
+            <img class="w-auto h-[100%] max-sm:h-[100%]" src="{{ url_for('static', filename='images/logo-03.png') }}">
+        </div>
+        <div class="w-[720px] max-lg:w-[420px] max-xl:w-[630px] max-sm:w-[290px]">
+            <div class="title leading-[70px] text-[64px] max-lg:text-[36px] max-sm:text-[25.5px] max-xl:text-[56px] font-bold h-[70px] max-sm:h-[56px] max-lg:h-[60px] max-xl:h-[62px] overflow-hidden">
+                <span show-title class="absolute">New <span>Privestornet</span> App</span>
+                <span class="absolute"><span>Private</span> & Safe</span>
+                <span class="absolute"><span>Multi-user</span> Management</span>
+            </div>
+            <div class="content text-[26px] max-xl:text-[20px] max-lg:text-[18px] max-sm:text-[15px] h-[78px] max-sm:h-[70px] max-lg:h-[72px] max-xl:h-[74px] overflow-hidden">
+                <span show-content class="absolute">Your best tool to build your own<br>network storage system</span>
+                <span class="absolute">Privestornet system cares about your<br>privacy and security</span>
+                <span class="absolute">You can more easily share your photos<br>or files with family or friends</span>
+            </div>
+            <a href="./" class="block text-center absolute mt-10 max-sm:w-full bg-[#0B0B0B] text-white w-[160px] p-2 rounded-full duration-300 shadow-md hover:bg-white hover:text-[#00BDE7]">Get Started</a>
+        </div>
+    </div>
+
+    <style>
+        :root {
+            --title-height: 70px;
+            --content-height: 78px;
+        }
+
+        @media (max-width: 1280px) {
+            :root {
+                --title-height: 62px;
+                --content-height: 74px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            :root {
+                --title-height: 60px;
+                --content-height: 72px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            :root {
+                --title-height: 56px;
+                --content-height: 70px;
+            }
+        }
+
+        .title span {
+            transition-duration: 0.3s;
+            transform: translateY(var(--title-height));
+            color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .title span span {
+            color: transparent;
+        }
+
+        .title span[show-title] {
+            color:  #0B0B0B;
+            transform: translateY(0);
+        }
+
+        .title span[show-title] span {
+            color: #00BDE7;
+        }
+
+        .title span[up-title] span {
+            transform: translateY(calc(-1 *  var(--title-height)));
+        }
+
+        .title span[up-title] {
+            transform: translateY(calc(-1 *  var(--title-height)));
+        }
+
+        .content span {
+            transition-duration: 0.3s;
+            transform: translateY(var(--content-height));
+            color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .content span[show-content] {
+            color:  #646464;
+            transform: translateY(0);
+        }
+
+        .content span[up-content] {
+            transform: translateY(calc(-1 *  var(--content-height)));
+        }
+    </style>
+
+    <script>
+        setInterval(function () {
+            const show = document.querySelector('span[show-title]')
+            const next = show.nextElementSibling || document.querySelector('.title span:first-child')
+            const up = document.querySelector('span[up-title]')
+
+            if (up) {
+                up.removeAttribute('up-title')
+            }
+
+            show.removeAttribute('show-title')
+            show.setAttribute('up-title', '')
+            next.setAttribute('show-title', '')
+        }, 4000)
+
+        setInterval(function () {
+            const show = document.querySelector('span[show-content]')
+            const next = show.nextElementSibling || document.querySelector('.content span:first-child')
+            const up = document.querySelector('span[up-content]')
+
+            if (up) {
+                up.removeAttribute('up-content')
+            }
+
+            show.removeAttribute('show-content')
+            show.setAttribute('up-content', '')
+            next.setAttribute('show-content', '')
+        }, 4000)
+    </script>
+{% endblock %}
