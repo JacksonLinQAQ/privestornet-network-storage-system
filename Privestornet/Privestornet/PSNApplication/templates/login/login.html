@@ -12,7 +12,7 @@
                 <h2 class="mb-5 max-sm:my-5 text-center font-bold text-[28px]">{{ config.get_system_config('system-name') }}</h2>
                 <input class="block bg-white bg-opacity-50 p-2 m-2 text-center rounded-full focus:border-4 focus:border-[#76d4f5] duration-200 outline-none" type="text" name="username" placeholder="Username">
                 <input class="block bg-white bg-opacity-50 p-2 m-2 text-center rounded-full focus:border-4 focus:border-[#76d4f5] duration-200 outline-none" type="password" name="password" placeholder="Password">
-                <input class="block p-2 m-2 text-center rounded-full outline-none bg-[#00BDE7] text-white duration-300 hover:bg-[#76d4f5] hover: hover:cursor-pointer" type="submit" value="Login">
+                <input class="block p-2 m-2 text-center rounded-full outline-none bg-[#00BDE7] text-white duration-300 hover:bg-[#76d4f5] hover:cursor-pointer" type="submit" value="Login">
             </form>
         </div>
     </div>
@@ -62,18 +62,5 @@
         document.querySelector(':root').style.setProperty('--box-width', String(box.offsetWidth) + 'px');
         document.querySelector(':root').style.setProperty('--box-height', String(box.offsetHeight) + 'px');
         box.style.animation = 'expand 1s';
-
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const error = urlParams.get('error');
-        const msg = urlParams.get('msg');
-
-        if (error) {
-            alert(error);
-        }
-
-        if (msg) {
-            alert(msg);
-        }
     </script>
 {% endblock %}

@@ -177,25 +177,49 @@ class Path:
 
         return (False, 'Move function only for file or folder')
 
+    def quickfind(self, path: str):
+        '''
+            Find a file or folder by path quickly
+        '''
+        self.scan_content()
+
+        path = path.split('/')
+
+        data: Path = None
+
+        if self.pathtype == 'root' and path[0] == '':
+            return self
+
+        for p in path:
+            if data:
+                data = data.find(name = p)
+            else:
+                data = self.find(name = p)
+
+            if not data:
+                return None
+
+        return data
+
     def find(self, name: str = None, path: str = None):
         '''
             Find a file or folder by name or path
         '''
         self.scan_content()
 
-        if name:
+        if name != None:
             if self.pathtype == 'root' or self.pathtype == 'folder':
                 for c in self.content:
                     if name == c.name:
                         return c
 
-        if path:
+        if path != None:
             if path == self.path:
                 return self
             elif self.pathtype == 'root' or self.pathtype == 'folder':
                 for c in self.content:
                     if c.find(path=path):
-                        return c.find(path=path)                    
+                        return c.find(path=path)
 
     def create_file(self, name: str, content: str = ''):
         '''
@@ -543,8 +567,19 @@ class Users:
         ]
 
     def remove_user(self, username: str):
+        '''
+            Remove user by username
+        '''
+        self.load_users()
         if username in self.list_usernames():
             self.find_user(username).remove_user()
+
+    def clear_users(self):
+        '''
+            Remove all users
+        '''
+        for user in self.users:
+            user.remove_user()
 
     def save_users(self):
         '''

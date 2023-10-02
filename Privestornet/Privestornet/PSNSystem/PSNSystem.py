@@ -60,7 +60,7 @@ class SystemConfig:
 class AccessedUser:
     def __init__(self, ip: str, users: Users):
         self.ip = ip
-        self.path = []
+        self.path: str = None
         self.user: User = None
         self.users: Users = users
         self.date = datetime.datetime.now().strftime(r'%Y-%m-%d %H:%M:%S')
@@ -116,6 +116,12 @@ class AccessedUser:
             'date': self.date,
             'accessed_page': self.accessed_page
         }
+
+    def concat_location(self, location: str):
+        '''
+            Concat the current path with the location and return it
+        '''
+        return concatpath(self.path, location)
 
 # System object
 class System:

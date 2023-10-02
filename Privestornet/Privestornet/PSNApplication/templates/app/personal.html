@@ -1,0 +1,76 @@
+{% extends 'root/app.html' %}
+
+{% block title %}Privestornet{% endblock %}
+
+{% block app %}
+    <h1 class="font-bold text-[24px] mb-8">My Storage</h1>
+    <div class="flex flex-col gap-y-[10px] flex-wrap">
+        <div class="flex gap-x-[12px] max-sm:text-[12px] items-center p-4 h-fit bg-white bg-opacity-50 rounded-2xl overflow-x-auto">
+            {% if path|length >= 1 and path[0] %}
+                <h2>
+                    <a href="./login?page={{ page }}&path={{ '/'.join(path[:-1]) }}" class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50">
+                        <img class="inline-block w-auto h-4 align-middle" src="{{ url_for('static', filename='images/left-arrow.png') }}">
+                    </a>
+                </h2>
+            {% endif %}
+
+            <h2 class="font-semibold">
+                <span>
+                    <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50 max-sm:p-1" href="./login?page={{ page }}">Personal</a>
+                    <img class="inline-block w-auto h-4 align-middle" src="{{ url_for('static', filename='images/right-arrow.png') }}">
+                </span>
+
+                <span class="omit-display align-middle p-2">({{ path|length - 5 }}) ...</span>
+
+                {% for idx, p in path_iter %}
+                    {% if p %}
+                        <span class="path">
+                            <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50 max-sm:p-1" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
+                            <span class="align-middle">
+                                <img class="inline-block w-auto h-4 align-middle" src="{{ url_for('static', filename='images/slash.png') }}">
+                            </span>
+                        </span>
+                    {% endif %}
+                {% endfor %}
+            </h2>
+        </div>
+        <div class="flex flex-col p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
+            {% for dt in data.to_dict()['content'].values() %}
+                <div class="m-2">
+                    <a href="./login?page={{ page }}&path={{ dt['path'] }}">
+                        <span class="mr-2">
+                            <img class="inline-block w-auto h-5" src="{{ url_for('static', filename='images/folder.png' if dt['pathtype'] == 'folder' else 'images/file.png') }}">
+                        </span>
+                        <span>{{ dt['name'] }}</span>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block app_extra %}
+    <style>
+        .popup {
+            display: none;
+        }
+    </style>
+
+    <script>
+        const omit_display = document.querySelector('.omit-display');
+        omit_display.style.display = 'none';
+
+        if (Number('{{ path|length }}') > 5) {
+            omit_display.style.display = 'inline-block';
+        }
+
+        const path = document.querySelectorAll('.path');
+        path.forEach((p) => {
+            p.style.display = 'none';
+        })
+
+        Array.from(path).slice(-5).forEach((p) => {
+            p.style.display = 'inline-block';
+        })
+    </script>
+{% endblock %}

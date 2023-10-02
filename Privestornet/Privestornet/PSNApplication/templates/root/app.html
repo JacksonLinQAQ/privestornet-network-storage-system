@@ -1,0 +1,115 @@
+{% extends 'root/root.html' %}
+
+{% block title %}Privestornet{% endblock %}
+
+{% block body %}
+    <div class="flex h-[90vh] max-xl:h-[81vh] max-lg:h-[86vh] max-sm:h-[83vh] gap-x-[10px] m-2">
+        <div class="animate-[fadein_0.4s] bg-white bg-opacity-50 h-[100%] p-4 max-sm:p-2 rounded-2xl overflow-y-auto max-sm:grow-0 min-w-[35px] max-sm:shrink-0">
+            <div class="flex mb-4 gap-x-[4px]">
+                <a class="p-2 max-sm:p-1 max-sm:rounded-lg hover:bg-white hover:bg-opacity-50 rounded-2xl" href="./login?page=home">
+                    <img class="block w-24 h-24 max-xl:h-16 max-xl:w-16 max-lg:h-14 max-lg:w-14 max-sm:h-8 max-sm:w-8" src="{{ url_for('static', filename='images/my-privestornet.png') }}">
+                </a>
+                <div class="max-sm:hidden p-2">
+                    <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] font-medium">{{ config.get_system_config('system-name') }}</h2>
+                    <h3 class="text-[14px] max-xl:text-[12px] max-lg:text-[10px]">ID: {{ config.get_system_config('system-id') }}</h3>
+                    <h3 class="text-[14px] max-xl:text-[12px] max-lg:text-[10px]">Version: {{ config.get_system_config('system-version') }}</h3>
+                </div>
+            </div>
+            <a class="block text-center rounded-full w-8 h-auto max-sm:rounded-lg w-full mb-2 p-2 max-sm:p-1 hover:bg-white hover:bg-opacity-50" href="./login?page=home">
+                <img class="inline-block align-middle h-5 w-auto" src="{{ url_for('static', filename='images/home.png') }}">
+                <span class="align-middle ml-2 max-sm:hidden">Home</span>
+            </a>
+            <a class="block text-center rounded-full w-8 h-auto max-sm:rounded-lg w-full mb-2 p-2 max-sm:p-1 hover:bg-white hover:bg-opacity-50" href="./login?page=myaccount">
+                <img class="inline-block align-middle h-5 w-auto" src="{{ url_for('static', filename='images/user.png') }}">
+                <span class="align-middle ml-2 max-sm:hidden">My Account</span>
+            </a>
+            {% if user.user.is_administrator %}
+                <a class="block text-center rounded-full w-8 h-auto max-sm:rounded-lg w-full mb-2 p-2 max-sm:p-1 hover:bg-white hover:bg-opacity-50" href="./login?page=admin">
+                    <img class="inline-block align-middle h-5 w-auto" src="{{ url_for('static', filename='images/admin.png') }}">
+                    <span class="align-middle ml-2 max-sm:hidden">Administrator Settings</span>
+                </a>
+            {% endif %}
+            <a class="block text-center rounded-full mt-10 w-8 h-auto max-sm:rounded-lg w-full mb-2 p-2 max-sm:p-1 hover:bg-white hover:bg-opacity-50" href="./login?page=personal">
+                <img class="inline-block align-middle h-5 w-auto" src="{{ url_for('static', filename='images/personal.png') }}">
+                <span class="align-middle ml-2 max-sm:hidden">My Storage</span>
+            </a>
+            <a class="block text-center rounded-full w-8 h-auto max-sm:rounded-lg w-full mb-2 p-2 max-sm:p-1 hover:bg-white hover:bg-opacity-50" href="./login?page=public">
+                <img class="inline-block align-middle h-5 w-auto" src="{{ url_for('static', filename='images/public.png') }}">
+                <span class="align-middle ml-2 max-sm:hidden">Public Storage</span>
+            </a>
+        </div>
+        <div class="animate-[slideup_0.4s] bg-white bg-opacity-50 grow-[1] max-sm:grow-[1] h-[100%] p-4 rounded-2xl overflow-y-auto">
+            {% block app %}{% endblock %}
+        </div>
+    </div>
+    <div class="popup absolute top-[50%] left-[50%] p-4 translate-x-[-50%] translate-y-[-50%] bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl">
+        <div class="popup-box flex flex-col">
+            <div class="popup-title flex justify-between">
+                <h2 class="popup-title-box text-center font-medium text-[24px]"></h2>
+                <button class="popup-close-btn p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50">
+                    <img class="w-auto h-4" src="{{ url_for('static', filename='images/close.png') }}">
+                </button>
+            </div>
+            <div class="popup-content flex flex-col">
+                {% block popup_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes expand {
+            from {
+                opacity: 0;
+                transform: scaleX(0);
+            }
+            to {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideup {
+            from {
+                opacity: 0;
+                transform: translateY(5%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <script>
+        document.querySelector('.popup').style.animation = 'fadein 0.3s';
+        const popup_close_btn = document.querySelector('.popup-close-btn');
+
+        popup_close_btn.addEventListener('click', () => {
+            document.querySelector('.popup').style.animation = 'fadeout 0.3s';
+            setTimeout(() => {
+                document.querySelector('.popup').style.display = 'none';
+                document.querySelector('.popup').style.animation = 'fadein 0.3s';
+            }, 200)
+        });
+    </script>
+
+    {% block app_extra %}{% endblock %}
+{% endblock %}

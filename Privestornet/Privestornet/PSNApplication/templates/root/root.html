@@ -43,5 +43,20 @@
             </div>
         </nav>
         {% block body %}{% endblock %}
+
+        <script>
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const error = urlParams.get('error');
+            const msg = urlParams.get('msg');
+
+            if (error) {
+                alert(error);
+            }
+
+            if (msg) {
+                alert(msg);
+            }
+        </script>
     </body>
 </html>

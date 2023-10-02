@@ -1,0 +1,122 @@
+{% extends 'root/app.html' %}
+
+{% block title %}Privestornet{% endblock %}
+
+{% block app %}
+    <h1 class="font-bold text-[24px] mb-8">My Account</h1>
+    <div class="flex flex-col gap-y-[10px] flex-wrap">
+        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
+            <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">My Information</h2>
+            <div class="flex gap-x-[18px]">
+                <img class="block w-auto h-32 max-sm:h-20" src="{{ url_for('static', filename='images/user.png') }}">
+                <div>
+                    <h2 class="text-[22px] max-xl:text-[20px] max-lg:text-[16px] max-sm:text-[16px] font-medium">{{ user.user.username }}</h2>
+                    <h3 class="text-[16px] max-xl:text-[14px] max-lg:text-[12px] max-sm:text-[12px] font-medium">{{ "Administrator" if user.user.is_administrator else "User" }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
+            <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">Change Username</h2>
+            <div class="flex gap-x-[18px] max-sm:flex-col">
+                <div class="items-center">
+                    <h2 class="my-2 font-medium">Current Username: <span class="text-[#06ADC0]">{{ user.user.username }}</span></h2>
+                </div>
+                <div>
+                    <button class="change-username-btn items-center p-2 w-[120px] max-sm:w-full rounded-full outline-none bg-[#00BDE7] text-white duration-300 hover:bg-[#76d4f5]">Change</button>
+                </div>
+            </div>
+        </div>
+        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
+            <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">Change Password</h2>
+            <div class="flex gap-x-[18px] max-sm:flex-col">
+                <div class="flex items-center">
+                    <h2 class="my-2 font-medium">Current Password: <span class="pw-display text-[#06ADC0]"></span></h2>
+                    <button class="pw-display-btn ml-4 p-2 rounded-full duration-200 hover:bg-sky-500 hover:bg-opacity-50">
+                        <img class="w-auto h-4" src="{{ url_for('static', filename='images/hide.png') }}">
+                    </button>
+                </div>
+                <div>
+                    <button class="change-password-btn items-center p-2 w-[120px] max-sm:w-full rounded-full outline-none bg-[#00BDE7] text-white duration-300 hover:bg-[#76d4f5]">Change</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block popup_content %}
+    <form class="change-info-form flex flex-col" method="post">
+        <input class="info-entry block bg-white bg-opacity-50 p-2 m-2 text-center rounded-full focus:border-4 focus:border-[#76d4f5] duration-200 outline-none" type="text">
+        <input class="confirm-info-entry block bg-white bg-opacity-50 p-2 m-2 text-center rounded-full focus:border-4 focus:border-[#76d4f5] duration-200 outline-none" type="text">
+        <input class="change-info-btn block p-2 m-2 text-center rounded-full outline-none bg-[#00BDE7] text-white duration-300 hover:bg-[#76d4f5] hover:cursor-pointer" type="submit" value="Change">
+    </form>
+{% endblock %}
+
+{% block app_extra %}
+    <style>
+        .popup {
+            width: 50%;
+            height: 30%;
+        }
+
+        @media screen and (max-width: 1024px){
+            .popup {
+                width: 70vw;
+                height: 75vh;
+            }
+        }
+
+        @media screen and (max-width: 640px){
+            .popup {
+                width: 95vw;
+                height: 75vh;
+            }
+        }
+    </style>
+
+    <script>
+        let pw_show = false;
+        const pw_display = document.querySelector(".pw-display");
+        const pw_display_btn_img = document.querySelector(".pw-display-btn > img");
+        pw_display.innerHTML = "*".repeat("{{ user.user.password }}".length);
+
+        const pw_display_btn = document.querySelector(".pw-display-btn");
+        pw_display_btn.addEventListener('click', () => {
+            if (pw_show) {
+                pw_display.innerHTML = "*".repeat("{{ user.user.password }}".length);
+                pw_display_btn_img.src = "{{ url_for('static', filename='images/hide.png') }}";
+                pw_show = false;
+            } else {
+                pw_display.innerHTML = "{{ user.user.password }}";
+                pw_display_btn_img.src = "{{ url_for('static', filename='images/view.png') }}";
+                pw_show = true;
+            }
+        });
+
+        const change_info_box = document.querySelector(".popup");
+        change_info_box.style.display = "none";
+
+        document.querySelector('.change-username-btn').addEventListener('click', () => {
+            document.querySelector('.popup-title-box').innerText = "Change Username";
+            document.querySelector('.change-info-form').action = './change-username?page={{ page }}';
+            document.querySelector('.info-entry').placeholder = 'New Username';
+            document.querySelector('.info-entry').type = 'text';
+            document.querySelector('.info-entry').name = 'username';
+            document.querySelector('.confirm-info-entry').placeholder = 'Confirm New Username';
+            document.querySelector('.confirm-info-entry').type = 'text';
+            document.querySelector('.confirm-info-entry').name = 'confirm-username';
+            change_info_box.style.display = "block";
+        });
+
+        document.querySelector('.change-password-btn').addEventListener('click', () => {
+            document.querySelector('.popup-title-box').innerText = "Change Password";
+            document.querySelector('.change-info-form').action = './change-password?page={{ page }}';
+            document.querySelector('.info-entry').placeholder = 'New Password';
+            document.querySelector('.info-entry').type = 'password';
+            document.querySelector('.info-entry').name = 'password';
+            document.querySelector('.confirm-info-entry').placeholder = 'Confirm New Password';
+            document.querySelector('.confirm-info-entry').type = 'password';
+            document.querySelector('.confirm-info-entry').name = 'confirm-password';
+            change_info_box.style.display = "block";
+        })
+    </script>
+{% endblock %}

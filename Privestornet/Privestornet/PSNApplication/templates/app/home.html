@@ -1,47 +1,36 @@
-{% extends 'root/root.html' %}
+{% extends 'root/app.html' %}
 
 {% block title %}Privestornet{% endblock %}
 
-{% block body %}
-    <div class="flex h-[90vh] max-xl:h-[81vh] max-lg:h-[86vh] max-sm:h-[83vh] gap-x-[10px] m-2">
-        <div class="bg-white bg-opacity-50 grow-[1] h-[100%] p-4 max-sm:p-2 rounded-2xl max-sm:grow-0 min-w-[35px] max-sm:shrink-0">
-            <div class="flex mb-4 gap-x-[4px]">
-                <a class="p-2 max-sm:p-1 max-sm:rounded-lg hover:bg-white hover:bg-opacity-50 rounded-2xl" href="./login?page=home">
-                    <img class="block w-24 h-24 max-xl:h-16 max-xl:w-16 max-lg:h-14 max-lg:w-14 max-sm:h-8 max-sm:w-8" src="{{ url_for('static', filename='images/my-privestornet.png') }}">
-                </a>
-                <div class="max-sm:hidden p-2">
-                    <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] font-medium">{{ config.get_system_config('system-name') }}</h2>
-                    <h3 class="text-[14px] max-xl:text-[12px] max-lg:text-[10px]">ID: {{ config.get_system_config('system-id') }}</h3>
-                    <h3 class="text-[14px] max-xl:text-[12px] max-lg:text-[10px]">Version: {{ config.get_system_config('system-version') }}</h3>
+{% block app %}
+    <h1 class="font-bold text-[24px] mb-8">Home</h1>
+    <div class="flex max-sm:flex-col gap-x-[20px] max-sm:gap-y-[10px] flex-wrap">
+        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
+            <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">My Device</h2>
+            <div class="flex gap-x-[18px]">
+                <img class="block w-20 h-20 max-xl:w-16 max-xl:h-16 max-lg:w-14 max-lg:h-14 max-sm:w-14 max-sm:h-14" src="{{ url_for('static', filename='images/my-privestornet.png') }}">
+                <div>
+                    <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-medium">{{ config.get_system_config('system-name') }}</h2>
+                    <h3 class="text-[14px] max-xl:text-[12px] max-lg:text-[10px] max-sm:text-[10px]">ID: {{ config.get_system_config('system-id') }}</h3>
+                    <h3 class="text-[14px] max-xl:text-[12px] max-lg:text-[10px] max-sm:text-[10px]">Version: {{ config.get_system_config('system-version') }}</h3>
                 </div>
             </div>
-            <a class="block text-center rounded-full w-8 h-auto max-sm:rounded-lg w-full mb-2 p-2 max-sm:p-1 hover:bg-white hover:bg-opacity-50" href="./login?page=home">
-                <img class="inline-block align-middle h-5 w-5" src="{{ url_for('static', filename='images/home.png') }}">
-                <span class="align-middle ml-2 max-sm:hidden">Home</span>
-            </a>
         </div>
-        <div class="flex bg-white bg-opacity-50 grow-[19] max-sm:grow-[1] h-[100%] p-4 rounded-2xl gap-x-[20px] max-sm:flex-col max-sm:gap-y-[10px] flex-wrap">
-            <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
-                <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">My Device</h2>
-                <div class="flex gap-x-[18px]">
-                    <img class="block w-20 h-20 max-xl:w-16 max-xl:h-16 max-lg:w-14 max-lg:h-14 max-sm:w-14 max-sm:h-14" src="{{ url_for('static', filename='images/my-privestornet.png') }}">
-                    <div>
-                        <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-medium">{{ config.get_system_config('system-name') }}</h2>
-                        <h3 class="text-[14px] max-xl:text-[12px] max-lg:text-[10px] max-sm:text-[10px]">ID: {{ config.get_system_config('system-id') }}</h3>
-                        <h3 class="text-[14px] max-xl:text-[12px] max-lg:text-[10px] max-sm:text-[10px]">Version: {{ config.get_system_config('system-version') }}</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
-                <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">My Account</h2>
-                <div class="flex gap-x-[18px]">
-                    <img class="block w-14 h-14 max-xl:w-12 max-xl:h-12 max-lg:w-10 max-lg:h-10 max-sm:w-10 max-sm:h-10" src="{{ url_for('static', filename='images/user.png') }}">
-                    <div>
-                        <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-medium">{{ user.user.username }}</h2>
-                        <h3 class="text-[14px] max-xl:text-[12px] max-lg:text-[12px] max-sm:text-[12px] font-medium">{{ "Administrator" if user.user.is_administrator else "User" }}</h3>
-                    </div>
+        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl hover:bg-opacity-20 hover:cursor-pointer">
+            <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">My Account</h2>
+            <div class="flex gap-x-[18px]">
+                <img class="block w-14 h-14 max-xl:w-12 max-xl:h-12 max-lg:w-10 max-lg:h-10 max-sm:w-10 max-sm:h-10" src="{{ url_for('static', filename='images/user.png') }}">
+                <div>
+                    <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-medium">{{ user.user.username }}</h2>
+                    <h3 class="text-[14px] max-xl:text-[12px] max-lg:text-[12px] max-sm:text-[12px] font-medium">{{ "Administrator" if user.user.is_administrator else "User" }}</h3>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .popup {
+            display: none;
+        }
+    </style>
 {% endblock %}
