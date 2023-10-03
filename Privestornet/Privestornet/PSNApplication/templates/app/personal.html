@@ -5,27 +5,29 @@
 {% block app %}
     <h1 class="font-bold text-[24px] mb-8">My Storage</h1>
     <div class="flex flex-col gap-y-[10px] flex-wrap">
-        <div class="flex gap-x-[12px] max-sm:text-[12px] items-center p-4 h-fit bg-white bg-opacity-50 rounded-2xl overflow-x-auto">
+        <div class="paths-container flex gap-x-[10px] items-center p-4 bg-white bg-opacity-50 rounded-2xl max-w-full">
             {% if path|length >= 1 and path[0] %}
                 <h2>
-                    <a href="./login?page={{ page }}&path={{ '/'.join(path[:-1]) }}" class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50">
-                        <img class="inline-block w-auto h-4 align-middle" src="{{ url_for('static', filename='images/left-arrow.png') }}">
+                    <a href="./login?page={{ page }}&path={{ '/'.join(path[:-1]) }}" class="p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50">
+                        <img class="inline-block w-auto h-4" src="{{ url_for('static', filename='images/left-arrow.png') }}">
                     </a>
                 </h2>
             {% endif %}
 
-            <h2 class="font-semibold">
+            <h2 class="paths font-semibold whitespace-nowrap">
                 <span>
-                    <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50 max-sm:p-1" href="./login?page={{ page }}">Personal</a>
+                    <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50" href="./login?page={{ page }}">Personal</a>
                     <img class="inline-block w-auto h-4 align-middle" src="{{ url_for('static', filename='images/right-arrow.png') }}">
                 </span>
 
-                <span class="omit-display align-middle p-2">({{ path|length - 5 }}) ...</span>
+                <span>
+                    <button class="all-paths align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50">...</button>
+                </span>
 
                 {% for idx, p in path_iter %}
                     {% if p %}
                         <span class="path">
-                            <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50 max-sm:p-1" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
+                            <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
                             <span class="align-middle">
                                 <img class="inline-block w-auto h-4 align-middle" src="{{ url_for('static', filename='images/slash.png') }}">
                             </span>
@@ -36,8 +38,8 @@
         </div>
         <div class="flex flex-col p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
             {% for dt in data.to_dict()['content'].values() %}
-                <div class="m-2">
-                    <a href="./login?page={{ page }}&path={{ dt['path'] }}">
+                <div class="flex m-1">
+                    <a class="p-2 hover:bg-sky-500 hover:bg-opacity-50 rounded-2xl" href="./login?page={{ page }}&path={{ dt['path'] }}">
                         <span class="mr-2">
                             <img class="inline-block w-auto h-5" src="{{ url_for('static', filename='images/folder.png' if dt['pathtype'] == 'folder' else 'images/file.png') }}">
                         </span>
@@ -49,28 +51,83 @@
     </div>
 {% endblock %}
 
+{% block popup_content %}
+    <div class="flex flex-col justify-center gap-y-[10px] m-4">
+        <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50" href="./login?page={{ page }}">Personal</a>
+        {% for idx, p in path_iter %}
+            {% if p %}
+                <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
 {% block app_extra %}
     <style>
         .popup {
-            display: none;
+            width: 30%;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        @media screen and (max-width: 1024px){
+            .popup {
+                width: 50vw;
+                max-height: 100vh;
+                overflow-y: auto;
+            }
+        }
+
+        @media screen and (max-width: 640px){
+            .popup {
+                width: 95vw;
+                max-height: 100vh;
+                overflow-y: auto;
+            }
         }
     </style>
 
     <script>
-        const omit_display = document.querySelector('.omit-display');
-        omit_display.style.display = 'none';
+        let paths_container_width_change = 0;
 
-        if (Number('{{ path|length }}') > 5) {
-            omit_display.style.display = 'inline-block';
+        const check_paths_display = () => {
+            const paths_container_width = document.querySelector('.paths-container').offsetWidth;
+            let paths_width = 290;
+            let is_enough_space = true;
+            const path = document.querySelectorAll('.path');
+
+            if (Math.abs(paths_container_width - paths_container_width_change) < 30) {
+                return;
+            } else {
+                paths_container_width_change = paths_container_width;
+            }
+
+            document.querySelector('.all-paths').style.display = 'none';
+
+            Array.from(path).reverse().forEach((p) => {
+                console.log((paths_width + p.offsetWidth) < paths_container_width)
+                console.log(paths_width, p.offsetWidth, paths_container_width)
+                if ((paths_width + p.offsetWidth) < paths_container_width && is_enough_space) {
+                    p.style.display = 'inline-block';
+                    paths_width += p.offsetWidth;
+                } else {
+                    p.style.display = 'none';
+                    document.querySelector('.all-paths').style.display = 'inline-block';
+                    is_enough_space = false;
+                }
+            })
         }
 
-        const path = document.querySelectorAll('.path');
-        path.forEach((p) => {
-            p.style.display = 'none';
-        })
+        check_paths_display();
+        window.addEventListener('resize', check_paths_display);
 
-        Array.from(path).slice(-5).forEach((p) => {
-            p.style.display = 'inline-block';
+        document.querySelector('.popup-title-box').innerText = "Location";
+
+        const location_box = document.querySelector(".popup");
+        location_box.style.display = "none";
+
+        document.querySelector('.all-paths').addEventListener('click', () => {
+            location_box.style.display = "block";
         })
     </script>
 {% endblock %}

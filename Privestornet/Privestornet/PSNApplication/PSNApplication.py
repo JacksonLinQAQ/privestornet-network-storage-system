@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_file
 from Privestornet.PSNSystem import PSNSystem
 from socket import gethostbyname, gethostname
 from jinja2.exceptions import TemplateNotFound
+import os
 
 APP_CONFIG = {
     'host': gethostbyname(gethostname()),
@@ -67,6 +68,12 @@ def login():
                         else:
                             data = None
 
+                        if data.pathtype == 'file':
+                            if request.args.get('download'):
+                                return send_file(os.path.abspath(data.fullpath), as_attachment=True)
+                            else:
+                                return send_file(os.path.abspath(data.fullpath))
+
                         path = path.split('/')
                         path_iter = list(enumerate(path))
                     else:
@@ -107,12 +114,16 @@ def change_username():
                     PSN_SYS.log(request.remote_addr, f'User \'{user.user.username}\' changed username to \'{username}\'')
                     user.user.modify_data(username = username)
                     return redirect(f'./login?page={request.args.get("page")}&msg=Username%20changed%20to%20\'{username}\'')
+
                 PSN_SYS.error(request.remote_addr, f'The new username \'{username}\' must not be the same as the old username \'{user.user.username}\'')
                 return redirect(f'./login?page={request.args.get("page")}&error=The%20new%20username%20must%20not%20be%20the%20same%20as%20the%20old%20username')
+
             PSN_SYS.error(request.remote_addr, f'Invaild username \'{username}\'')
             return redirect(f'./login?page={request.args.get("page")}&error=Invaild%20username%20\'{username}\'')
+
         PSN_SYS.error(request.remote_addr, f'New username \'{username}\' and confirm new username \'{confirm_username}\' do not match')
         return redirect(f'./login?page={request.args.get("page")}&error=New%20username%20and%20confirm%20new%20username%20do%20not%20match')
+
     return redirect(f'./login')
 
 @PSN_APP.route('/change-password', methods=['POST'])
@@ -133,10 +144,14 @@ def change_password():
                     PSN_SYS.log(request.remote_addr, f'User \'{user.user.password}\' changed password to \'{password}\'')
                     user.user.modify_data(password = password)
                     return redirect(f'./login?page={request.args.get("page")}&msg=password%20changed%20to%20\'{password}\'')
+
                 PSN_SYS.error(request.remote_addr, f'The new password \'{password}\' must not be the same as the old password \'{user.user.password}\'')
                 return redirect(f'./login?page={request.args.get("page")}&error=The%20new%20password%20must%20not%20be%20the%20same%20as%20the%20old%20password')
+
             PSN_SYS.error(request.remote_addr, f'Invaild password \'{password}\'')
             return redirect(f'./login?page={request.args.get("page")}&error=Invaild%20password%20\'{password}\'')
+
         PSN_SYS.error(request.remote_addr, f'New password \'{password}\' and confirm new password \'{confirm_password}\' do not match')
         return redirect(f'./login?page={request.args.get("page")}&error=New%20password%20and%20confirm%20new%20password%20do%20not%20match')
+
     return redirect(f'./login')
