@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_file
 from Privestornet.PSNSystem import PSNSystem
 from socket import gethostbyname, gethostname
 from jinja2.exceptions import TemplateNotFound
-import os
+import os, zipfile
 
 APP_CONFIG = {
     'host': gethostbyname(gethostname()),
@@ -155,3 +155,50 @@ def change_password():
         return redirect(f'./login?page={request.args.get("page")}&error=New%20password%20and%20confirm%20new%20password%20do%20not%20match')
 
     return redirect(f'./login')
+
+@PSN_APP.route('/upload', methods=['POST'])
+def upload():
+    if not PSN_SYS.find_user(request.remote_addr).is_login():
+        return redirect(f'./login?page={request.args.get("dst")}&error=Please%20login%20first')
+
+    dst = request.args.get('dst')
+    path = request.args.get('path')
+    all_data = request.files.getlist('upload-data')
+    datatype = request.args.get('type')
+
+    if not dst or path == None or not all_data or not datatype:
+        PSN_SYS.error(request.remote_addr, f'Invaild request')
+        return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&error=Invaild%20request')
+
+    if not (dst == 'personal' or dst == 'public'):
+        PSN_SYS.error(request.remote_addr, f'Invaild destination \'{dst}\'')
+        return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&error=Invaild%20destination%20\'{dst}\'')
+
+    if not (PSN_SYS.find_user(request.remote_addr).user.personal_data.find(path=path).pathtype == 'root' or PSN_SYS.find_user(request.remote_addr).user.personal_data.find(path=path).pathtype == 'folder'):
+        PSN_SYS.error(request.remote_addr, f'Invaild path \'{path}\'')
+        return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&error=Invaild%20path%20\'{path}\'')
+
+    # Get absolute path
+    if dst == 'personal':
+        path = PSN_SYS.find_user(request.remote_addr).user.personal_data.find(path=path).fullpath
+    elif dst == 'public':
+        path = PSN_SYS.find_user(request.remote_addr).user.public_data.find(path=path).fullpath
+    path = os.path.abspath(path)
+
+    for data in all_data:
+        # Save file or folder
+        data.save(f'{path}/{data.filename}')
+
+        # Check if data is a folder
+        if datatype == 'folder':
+            # Extract the zip folder
+            with zipfile.ZipFile(f'{path}/{data.filename}', 'r', metadata_encoding='utf-8') as zip_ref:
+                os.makedirs(f'{path}/{os.path.splitext(data.filename)[0]}')
+                zip_ref.extractall(f'{path}/{os.path.splitext(data.filename)[0]}')
+
+            # Check if the zip file exists, then delete it
+            if os.path.exists(f'{path}/{data.filename}'):
+                os.remove(f'{path}/{data.filename}')
+
+    PSN_SYS.log(request.remote_addr, f'Upload \'{data.filename}\' to \'{path}\'')
+    return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&msg=Upload%20success')

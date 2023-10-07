@@ -3,12 +3,16 @@
 {% block title %}Privestornet{% endblock %}
 
 {% block app %}
+    <form class="upload-data-form hidden" action="./upload?dst=personal&type=file&path={{ '/'.join(path) }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="upload-data" multiple>
+        <input type="submit">
+    </form>
     <h1 class="font-bold text-[24px] mb-8">My Storage</h1>
     <div class="flex flex-col gap-y-[10px] flex-wrap">
-        <div class="paths-container flex gap-x-[10px] items-center p-4 bg-white bg-opacity-50 rounded-2xl max-w-full">
+        <div class="paths-container flex gap-x-[10px] items-center p-2 bg-white bg-opacity-50 rounded-[20px] max-w-full shadow-sm">
             {% if path|length >= 1 and path[0] %}
                 <h2>
-                    <a href="./login?page={{ page }}&path={{ '/'.join(path[:-1]) }}" class="p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50">
+                    <a href="./login?page={{ page }}&path={{ '/'.join(path[:-1]) }}" class="p-1 rounded-2xl hover:bg-sky-500/10 duration-300">
                         <img class="inline-block w-auto h-4" src="{{ url_for('static', filename='images/left-arrow.png') }}">
                     </a>
                 </h2>
@@ -16,18 +20,18 @@
 
             <h2 class="paths font-semibold whitespace-nowrap">
                 <span>
-                    <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50" href="./login?page={{ page }}">Personal</a>
+                    <a class="align-middle p-1 rounded-2xl hover:bg-sky-500/10 duration-300" href="./login?page={{ page }}">Personal</a>
                     <img class="inline-block w-auto h-4 align-middle" src="{{ url_for('static', filename='images/right-arrow.png') }}">
                 </span>
 
                 <span>
-                    <button class="all-paths align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50">...</button>
+                    <button class="all-paths px-1 align-middle rounded-2xl hover:bg-sky-500/10 duration-300">...</button>
                 </span>
 
                 {% for idx, p in path_iter %}
                     {% if p %}
                         <span class="path">
-                            <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
+                            <a class="align-middle p-1 rounded-2xl hover:bg-sky-500/10 duration-300" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
                             <span class="align-middle">
                                 <img class="inline-block w-auto h-4 align-middle" src="{{ url_for('static', filename='images/slash.png') }}">
                             </span>
@@ -36,10 +40,10 @@
                 {% endfor %}
             </h2>
         </div>
-        <div class="flex flex-col p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
+        <div class="flex flex-col p-1 h-fit bg-white bg-opacity-50 rounded-[20px] shadow-sm">
             {% for dt in data.to_dict()['content'].values() %}
-                <div class="flex m-1">
-                    <a class="p-2 hover:bg-sky-500 hover:bg-opacity-50 rounded-2xl" href="./login?page={{ page }}&path={{ dt['path'] }}">
+                <div class="flex justify-between m-1">
+                    <a class="py-1 px-2 hover:bg-sky-500/10 hover:bg-opacity-50 rounded-2xl duration-300" href="./login?page={{ page }}&path={{ dt['path'] }}">
                         <span class="mr-2">
                             <img class="inline-block w-auto h-5" src="{{ url_for('static', filename='images/folder.png' if dt['pathtype'] == 'folder' else 'images/file.png') }}">
                         </span>
@@ -49,14 +53,29 @@
             {% endfor %}
         </div>
     </div>
+    <div class="flex flex-col items-end absolute bottom-5 right-5 gap-y-[20px]">
+        <div class="upload-options flex flex-col bg-white bg-opacity-80 p-1 gap-y-[5px] rounded-[20px] shadow-sm">
+            <button class="upload-file-btn hover:bg-sky-500/10 hover:cursor-pointer py-2 px-4 rounded-[20px] duration-300">
+                <img class="w-auto h-4 inline-block" src="{{ url_for('static', filename='images/upload-file.png') }}">
+                <span class="ml-2 max-sm:hidden">Upload Files</span>
+            </button>
+            <button class="upload-folder-btn hover:bg-sky-500/10 hover:cursor-pointer py-2 px-4 rounded-[20px] duration-300">
+                <img class="w-auto h-4 inline-block" src="{{ url_for('static', filename='images/upload-folder.png') }}">
+                <span class="ml-2 max-sm:hidden">Upload Folders</span>
+            </button>
+        </div>
+        <div class="upload-btn bg-white bg-opacity-80 p-2 rounded-full hover:bg-sky-500/10 hover:cursor-pointer w-fit shadow-sm duration-300">
+            <img class="w-5 h-5" src="{{ url_for('static', filename='images/add.png') }}">
+        </div>
+    </div>
 {% endblock %}
 
 {% block popup_content %}
     <div class="flex flex-col justify-center gap-y-[10px] m-4">
-        <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50" href="./login?page={{ page }}">Personal</a>
+        <a class="align-middle py-1 px-4 rounded-2xl hover:bg-sky-500/10 hover:bg-opacity-50 duration-300" href="./login?page={{ page }}">Personal</a>
         {% for idx, p in path_iter %}
             {% if p %}
-                <a class="align-middle p-2 rounded-2xl hover:bg-sky-500 hover:bg-opacity-50" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
+                <a class="align-middle py-1 px-4 rounded-2xl hover:bg-sky-500/10 hover:bg-opacity-50 duration-300" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
             {% endif %}
         {% endfor %}
     </div>
@@ -83,6 +102,28 @@
                 width: 95vw;
                 max-height: 100vh;
                 overflow-y: auto;
+            }
+        }
+
+        @keyframes expand {
+            from {
+                opacity: 0;
+                transform: scaleY(0);
+            }
+            to {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+        }
+
+        @keyframes shrink {
+            from {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+            to {
+                opacity: 0;
+                transform: scaleY(0);
             }
         }
     </style>
@@ -128,6 +169,45 @@
 
         document.querySelector('.all-paths').addEventListener('click', () => {
             location_box.style.display = "block";
+        })
+
+        document.querySelector('.upload-options').style.display = 'none';
+
+        document.querySelector('.upload-btn').addEventListener('click',  () => {
+            if (document.querySelector('.upload-options').style.display === 'none') {
+                document.querySelector('.upload-options').style.animation = 'expand 0.5s';
+                document.querySelector('.upload-options').style.display = 'flex';
+            } else {
+                document.querySelector('.upload-options').style.animation = 'shrink 0.5s';
+                setTimeout(() => {
+                    document.querySelector('.upload-options').style.display = 'none';
+                }, 400)
+            }
+        })
+
+        document.addEventListener('click', (event) => {
+            if (!(document.querySelector('.upload-btn').contains(event.target))) {
+                document.querySelector('.upload-options').style.animation = 'shrink 0.5s';
+                setTimeout(() => {
+                    document.querySelector('.upload-options').style.display = 'none';
+                }, 400)
+            }
+        });
+
+        document.querySelector('.upload-file-btn').addEventListener('click', () => {
+            document.querySelector('.upload-data-form').action = "./upload?dst=personal&type=file&path={{ '/'.join(path) }}";
+            document.querySelector('.upload-data-form input[name="upload-data"').accept = "*";
+            document.querySelector('.upload-data-form input[name="upload-data"]').click();
+        })
+
+        document.querySelector('.upload-folder-btn').addEventListener('click', () => {
+            document.querySelector('.upload-data-form').action = "./upload?dst=personal&type=folder&path={{ '/'.join(path) }}";
+            document.querySelector('.upload-data-form input[name="upload-data"').accept = ".zip";
+            document.querySelector('.upload-data-form input[name="upload-data"]').click();
+        })
+
+        document.querySelector('.upload-data-form input[name="upload-data"]').addEventListener('change', () => {
+            document.querySelector('.upload-data-form input[type="submit"]').click();
         })
     </script>
 {% endblock %}

@@ -5,7 +5,7 @@
 {% block app %}
     <h1 class="font-bold text-[24px] mb-8">My Account</h1>
     <div class="flex flex-col gap-y-[10px] flex-wrap">
-        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
+        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl shadow-sm">
             <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">My Information</h2>
             <div class="flex gap-x-[18px]">
                 <img class="block w-auto h-32 max-sm:h-20" src="{{ url_for('static', filename='images/user.png') }}">
@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
+        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl shadow-sm">
             <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">Change Username</h2>
             <div class="flex gap-x-[18px] max-sm:flex-col">
                 <div class="items-center">
@@ -26,12 +26,12 @@
                 </div>
             </div>
         </div>
-        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl">
+        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl shadow-sm">
             <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">Change Password</h2>
             <div class="flex gap-x-[18px] max-sm:flex-col">
                 <div class="flex items-center">
                     <h2 class="my-2 font-medium">Current Password: <span class="pw-display text-[#06ADC0]"></span></h2>
-                    <button class="pw-display-btn ml-4 p-2 rounded-full duration-200 hover:bg-sky-500 hover:bg-opacity-50">
+                    <button class="pw-display-btn ml-4 p-2 rounded-full duration-200 hover:bg-sky-500/10 hover:bg-opacity-50">
                         <img class="w-auto h-4" src="{{ url_for('static', filename='images/hide.png') }}">
                     </button>
                 </div>
@@ -44,7 +44,7 @@
 {% endblock %}
 
 {% block popup_content %}
-    <form class="change-info-form flex flex-col" method="post">
+    <form class="change-info-form flex flex-col shadow-sm" method="post">
         <input class="info-entry block bg-white bg-opacity-50 p-2 m-2 text-center rounded-full focus:border-4 focus:border-[#76d4f5] duration-200 outline-none" type="text">
         <input class="confirm-info-entry block bg-white bg-opacity-50 p-2 m-2 text-center rounded-full focus:border-4 focus:border-[#76d4f5] duration-200 outline-none" type="text">
         <input class="change-info-btn block p-2 m-2 text-center rounded-full outline-none bg-[#00BDE7] text-white duration-300 hover:bg-[#76d4f5] hover:cursor-pointer" type="submit" value="Change">

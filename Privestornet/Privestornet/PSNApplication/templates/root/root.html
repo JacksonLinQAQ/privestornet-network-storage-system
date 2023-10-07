@@ -16,25 +16,25 @@
                     </a>
                 </div>
                 <div class="mx-4 max-sm:mx-2">
-                    <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1" href="./">
+                    <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./">
                         <img class="inline-block align-middle" width="22px" height="22px" src="{{ url_for('static', filename='images/home.png') }}">
                         <span class="inline-block ml-1 align-middle max-sm:hidden">Home</span>
                     </a>
-                    <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1" href="./">
+                    <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./">
                         <img class="inline-block align-middle" width="20px" height="20px" src="{{ url_for('static', filename='images/settings.png') }}">
                         <span class="inline-block ml-1 align-middle max-sm:hidden">Settings</span>
                     </a>
                     {% if user.is_login() %}
-                        <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1" href="./login">
+                        <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./login">
                             <img class="inline-block align-middle" width="20px" height="20px" src="{{ url_for('static', filename='images/user.png') }}">
                             <span class="inline-block ml-1 align-middle">{{ user.user.username }}</span>
                         </a>
-                        <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1" href="./logout">
+                        <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./logout">
                             <img class="inline-block align-middle" width="20px" height="20px" src="{{ url_for('static', filename='images/logout.png') }}">
                             <span class="inline-block ml-1 align-middle max-sm:hidden">Log Out</span>
                         </a>
                     {% else %}
-                        <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1" href="./login">
+                        <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./login">
                             <img class="inline-block align-middle" width="20px" height="20px" src="{{ url_for('static', filename='images/login.png') }}">
                             <span class="inline-block ml-1 align-middle max-sm:hidden">Log In</span>
                         </a>
