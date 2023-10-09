@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_file
 from Privestornet.PSNSystem import PSNSystem
 from socket import gethostbyname, gethostname
 from jinja2.exceptions import TemplateNotFound
-import os, zipfile
+import os, zipfile, shutil
 
 APP_CONFIG = {
     'host': gethostbyname(gethostname()),
@@ -68,14 +68,25 @@ def login():
                         else:
                             data = None
 
-                        if data.pathtype == 'file':
-                            if request.args.get('download'):
-                                return send_file(os.path.abspath(data.fullpath), as_attachment=True)
-                            else:
-                                return send_file(os.path.abspath(data.fullpath))
+                        if data:
+                            if data.pathtype == 'file':
+                                if request.args.get('download'):
+                                    return send_file(os.path.abspath(data.fullpath), as_attachment=True)
+                                else:
+                                    return send_file(os.path.abspath(data.fullpath))
+                            elif data.pathtype == 'folder':
+                                if request.args.get('download'):
+                                    shutil.make_archive(f'./Privestornet/PSNPkgDownload/{os.path.splitext(data.name)[0]}', 'zip', data.fullpath)
+                                    return send_file(os.path.abspath(f'./Privestornet/PSNPkgDownload/{os.path.splitext(data.name)[0]}.zip'), as_attachment=True)
 
-                        path = path.split('/')
-                        path_iter = list(enumerate(path))
+                            path = path.split('/')
+                            path_iter = list(enumerate(path))
+
+                        else:
+                            path = None
+                            path_iter = None
+                            data = None
+                            return render_template(f'error/file-not-found.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, path=path, path_iter=path_iter, data=data), 404
                     else:
                         path = None
                         path_iter = None
@@ -108,7 +119,7 @@ def change_username():
         # If the new username is the same as the confirm new username
         if username == confirm_username:
             # If the new username doesn't contain any space characters
-            if not ' ' in username:
+            if not (' ' in username or username == ''):
                 # If the new username isn't the same as the old one
                 if not username == user.user.username:
                     PSN_SYS.log(request.remote_addr, f'User \'{user.user.username}\' changed username to \'{username}\'')
@@ -138,7 +149,7 @@ def change_password():
         # If the new password is the same as the confirm new password
         if password == confirm_password:
             # If the new password doesn't contain any space characters
-            if not ' ' in password:
+            if not (' ' in password or password == ''):
                 # If the new password isn't the same as the old one
                 if not password == user.user.password:
                     PSN_SYS.log(request.remote_addr, f'User \'{user.user.password}\' changed password to \'{password}\'')
@@ -158,6 +169,7 @@ def change_password():
 
 @PSN_APP.route('/upload', methods=['POST'])
 def upload():
+    PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
     if not PSN_SYS.find_user(request.remote_addr).is_login():
         return redirect(f'./login?page={request.args.get("dst")}&error=Please%20login%20first')
 
@@ -185,20 +197,33 @@ def upload():
         path = PSN_SYS.find_user(request.remote_addr).user.public_data.find(path=path).fullpath
     path = os.path.abspath(path)
 
+    unsupported_folders = []
+
     for data in all_data:
         # Save file or folder
         data.save(f'{path}/{data.filename}')
 
         # Check if data is a folder
         if datatype == 'folder':
-            # Extract the zip folder
-            with zipfile.ZipFile(f'{path}/{data.filename}', 'r', metadata_encoding='utf-8') as zip_ref:
-                os.makedirs(f'{path}/{os.path.splitext(data.filename)[0]}')
-                zip_ref.extractall(f'{path}/{os.path.splitext(data.filename)[0]}')
+            if os.path.splitext(data.filename)[1] == '.zip':
+                # Extract the zip folder
+                with zipfile.ZipFile(f'{path}/{data.filename}', 'r') as zip_ref:
+                    os.makedirs(f'{path}/{os.path.splitext(data.filename)[0]}')
 
-            # Check if the zip file exists, then delete it
-            if os.path.exists(f'{path}/{data.filename}'):
-                os.remove(f'{path}/{data.filename}')
+                    zipInfo = zip_ref.infolist()
+                    for member in zipInfo:
+                        member.filename = member.filename.encode('cp437').decode('gbk')
+                        zip_ref.extract(member, f'{path}/{os.path.splitext(data.filename)[0]}')
+
+                # Check if the zip file exists, then delete it
+                if os.path.exists(f'{path}/{data.filename}'):
+                    os.remove(f'{path}/{data.filename}')
+            else:
+                unsupported_folders.append(data.filename)
+
+    if unsupported_folders:
+        PSN_SYS.error(request.remote_addr, f'Unsupported folders: \'{", ".join(unsupported_folders)}\'')
+        return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&error=Unsupported%20folders:%20\'{",%20".join(unsupported_folders)}\'')
 
     PSN_SYS.log(request.remote_addr, f'Upload \'{data.filename}\' to \'{path}\'')
     return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&msg=Upload%20success')

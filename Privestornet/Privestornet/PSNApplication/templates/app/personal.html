@@ -3,85 +3,121 @@
 {% block title %}Privestornet{% endblock %}
 
 {% block app %}
+    <a class="redirect hidden"></a>
     <form class="upload-data-form hidden" action="./upload?dst=personal&type=file&path={{ '/'.join(path) }}" method="post" enctype="multipart/form-data">
         <input type="file" name="upload-data" multiple>
         <input type="submit">
     </form>
     <h1 class="font-bold text-[24px] mb-8">My Storage</h1>
     <div class="flex flex-col gap-y-[10px] flex-wrap">
-        <div class="paths-container flex gap-x-[10px] items-center p-2 bg-white bg-opacity-50 rounded-[20px] max-w-full shadow-sm">
+        <div class="paths-container flex gap-x-[10px] items-center p-2 bg-[color:var(--theme-color-light)] rounded-[20px] max-w-full shadow-sm">
             {% if path|length >= 1 and path[0] %}
                 <h2>
-                    <a href="./login?page={{ page }}&path={{ '/'.join(path[:-1]) }}" class="p-1 rounded-2xl hover:bg-sky-500/10 duration-300">
-                        <img class="inline-block w-auto h-4" src="{{ url_for('static', filename='images/left-arrow.png') }}">
+                    <a href="./login?page={{ page }}&path={{ '/'.join(path[:-1]) }}" class="p-1 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300">
+                        <img class="inline-block w-auto h-4 img-left-arrow">
                     </a>
                 </h2>
             {% endif %}
 
             <h2 class="paths font-semibold whitespace-nowrap">
                 <span>
-                    <a class="align-middle p-1 rounded-2xl hover:bg-sky-500/10 duration-300" href="./login?page={{ page }}">Personal</a>
-                    <img class="inline-block w-auto h-4 align-middle" src="{{ url_for('static', filename='images/right-arrow.png') }}">
+                    <a class="align-middle p-1 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}">Personal</a>
+                    <img class="inline-block w-auto h-4 align-middle img-right-arrow">
                 </span>
 
                 <span>
-                    <button class="all-paths px-1 align-middle rounded-2xl hover:bg-sky-500/10 duration-300">...</button>
+                    <button class="all-paths px-1 align-middle rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300">...</button>
                 </span>
 
                 {% for idx, p in path_iter %}
                     {% if p %}
                         <span class="path">
-                            <a class="align-middle p-1 rounded-2xl hover:bg-sky-500/10 duration-300" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
+                            <a class="align-middle p-1 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
                             <span class="align-middle">
-                                <img class="inline-block w-auto h-4 align-middle" src="{{ url_for('static', filename='images/slash.png') }}">
+                                <img class="inline-block w-auto h-4 align-middle img-slash">
                             </span>
                         </span>
                     {% endif %}
                 {% endfor %}
             </h2>
         </div>
-        <div class="flex flex-col p-1 h-fit bg-white bg-opacity-50 rounded-[20px] shadow-sm">
+        <div class="files-display flex flex-col p-1 h-fit bg-[color:var(--theme-color-light)] rounded-[20px] shadow-sm">
             {% for dt in data.to_dict()['content'].values() %}
                 <div class="flex justify-between m-1">
-                    <a class="py-1 px-2 hover:bg-sky-500/10 hover:bg-opacity-50 rounded-2xl duration-300" href="./login?page={{ page }}&path={{ dt['path'] }}">
+                    <a class="py-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-2xl duration-300" href="./login?page={{ page }}&path={{ dt['path'] }}">
                         <span class="mr-2">
-                            <img class="inline-block w-auto h-5" src="{{ url_for('static', filename='images/folder.png' if dt['pathtype'] == 'folder' else 'images/file.png') }}">
+                            <img class="inline-block w-auto h-5 {{ 'img-folder' if dt['pathtype'] == 'folder' else 'img-file' }}">
                         </span>
-                        <span>{{ dt['name'] }}</span>
+                        <span class="filename" filename="{{ dt['name'] }}">{{ dt['name'] }}</span>
                     </a>
+                    <button onclick="show_fileinfo_menu(this)" filetype="{{ dt['pathtype'] }}" filepath="{{ dt['path'] }}" class="show-fileinfo-menu-btn rounded-2xl p-1 px-2 mx-1 duration-300 hover:bg-[color:var(--theme-color-hover-highlight)]">
+                        <img class="inline-block w-auto h-4 img-more">
+                    </button>
                 </div>
             {% endfor %}
-        </div>
-    </div>
-    <div class="flex flex-col items-end absolute bottom-5 right-5 gap-y-[20px]">
-        <div class="upload-options flex flex-col bg-white bg-opacity-80 p-1 gap-y-[5px] rounded-[20px] shadow-sm">
-            <button class="upload-file-btn hover:bg-sky-500/10 hover:cursor-pointer py-2 px-4 rounded-[20px] duration-300">
-                <img class="w-auto h-4 inline-block" src="{{ url_for('static', filename='images/upload-file.png') }}">
-                <span class="ml-2 max-sm:hidden">Upload Files</span>
-            </button>
-            <button class="upload-folder-btn hover:bg-sky-500/10 hover:cursor-pointer py-2 px-4 rounded-[20px] duration-300">
-                <img class="w-auto h-4 inline-block" src="{{ url_for('static', filename='images/upload-folder.png') }}">
-                <span class="ml-2 max-sm:hidden">Upload Folders</span>
-            </button>
-        </div>
-        <div class="upload-btn bg-white bg-opacity-80 p-2 rounded-full hover:bg-sky-500/10 hover:cursor-pointer w-fit shadow-sm duration-300">
-            <img class="w-5 h-5" src="{{ url_for('static', filename='images/add.png') }}">
         </div>
     </div>
 {% endblock %}
 
 {% block popup_content %}
     <div class="flex flex-col justify-center gap-y-[10px] m-4">
-        <a class="align-middle py-1 px-4 rounded-2xl hover:bg-sky-500/10 hover:bg-opacity-50 duration-300" href="./login?page={{ page }}">Personal</a>
+        <a class="align-middle py-1 px-4 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}">Personal</a>
         {% for idx, p in path_iter %}
             {% if p %}
-                <a class="align-middle py-1 px-4 rounded-2xl hover:bg-sky-500/10 hover:bg-opacity-50 duration-300" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
+                <a class="align-middle py-1 px-4 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
             {% endif %}
         {% endfor %}
     </div>
 {% endblock %}
 
 {% block app_extra %}
+    <div class="flex flex-col items-end bottom-6 right-6 gap-y-[20px] fixed">
+        <div class="upload-options flex flex-col bg-[color:var(--theme-color-medium)] p-1 gap-y-[5px] rounded-[20px] shadow-sm backdrop-blur-sm">
+            <button class="upload-file-btn hover:bg-[color:var(--theme-color-hover-highlight)] hover:cursor-pointer py-2 px-4 rounded-[20px] duration-300">
+                <img class="w-auto h-4 inline-block img-upload-file">
+                <span class="ml-2 max-sm:hidden">Upload Files</span>
+            </button>
+            <button class="upload-folder-btn hover:bg-[color:var(--theme-color-hover-highlight)] hover:cursor-pointer py-2 px-4 rounded-[20px] duration-300">
+                <img class="w-auto h-4 inline-block img-upload-folder">
+                <span class="ml-2 max-sm:hidden">Upload Folders</span>
+            </button>
+        </div>
+        <div class="upload-btn bg-[color:var(--theme-color-medium)] p-2 rounded-full hover:bg-[color:var(--theme-color-hover-highlight)] hover:cursor-pointer w-fit shadow-sm duration-300">
+            <img class="w-5 h-5 img-add">
+        </div>
+    </div>
+
+    <div class="absolute invisible p-1 file-info-menu rounded-tl-[20px] rounded-bl-[20px] backdrop-blur-sm flex flex-col gap-y-[10px] bg-[color:var(--theme-color-medium)] shadow-sm">
+        <button class="view p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+            <img class="w-auto h-5 inline-block img-view align-middle">
+            <span class="ml-2 align-middle max-sm:hidden">View</span>
+        </button>
+        <button class="download p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+            <img class="w-auto h-5 inline-block img-download align-middle">
+            <span class="ml-2 align-middle max-sm:hidden">Download</span>
+        </button>
+        <button class="delete p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+            <img class="w-auto h-5 inline-block img-delete align-middle">
+            <span class="ml-2 align-middle max-sm:hidden">Delete</span>
+        </button>
+        <button class="rename p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+            <img class="w-auto h-5 inline-block img-rename align-middle">
+            <span class="ml-2 align-middle max-sm:hidden">Rename</span>
+        </button>
+        <button class="move p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+            <img class="w-auto h-5 inline-block img-move align-middle">
+            <span class="ml-2 align-middle max-sm:hidden">Move</span>
+        </button>
+        <button class="share p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+            <img class="w-auto h-5 inline-block img-share align-middle">
+            <span class="ml-2 align-middle max-sm:hidden">Share</span>
+        </button>
+        <button class="properties p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+            <img class="w-auto h-5 inline-block img-properties align-middle">
+            <span class="ml-2 align-middle max-sm:hidden">Properties</span>
+        </button>
+    </div>
+
     <style>
         .popup {
             width: 30%;
@@ -109,10 +145,12 @@
             from {
                 opacity: 0;
                 transform: scaleY(0);
+                visibility: hidden;
             }
             to {
                 opacity: 1;
                 transform: scaleY(1);
+                visibility: visible;
             }
         }
 
@@ -120,15 +158,24 @@
             from {
                 opacity: 1;
                 transform: scaleY(1);
+                visibility: visible;
             }
             to {
                 opacity: 0;
                 transform: scaleY(0);
+                visibility: hidden;
             }
         }
     </style>
 
     <script>
+        const redirect = (url) => {
+            const redirect_url = document.querySelector('.redirect');
+            redirect_url.href = url;
+            redirect_url.click()
+        }
+
+        // Limit the path display length
         let paths_container_width_change = 0;
 
         const check_paths_display = () => {
@@ -192,6 +239,15 @@
                     document.querySelector('.upload-options').style.display = 'none';
                 }, 400)
             }
+
+            let is_fileinfo_menu_btns_clicked = Array()
+            document.querySelectorAll('.show-fileinfo-menu-btn').forEach((e) => {
+                is_fileinfo_menu_btns_clicked.push(e.contains(event.target));
+            })
+
+            if (!is_fileinfo_menu_btns_clicked.some((e) => { return e == true; })) {
+                document.querySelector('.file-info-menu').style.animation = 'shrink 0.5s forwards';
+            }
         });
 
         document.querySelector('.upload-file-btn').addEventListener('click', () => {
@@ -209,5 +265,61 @@
         document.querySelector('.upload-data-form input[name="upload-data"]').addEventListener('change', () => {
             document.querySelector('.upload-data-form input[type="submit"]').click();
         })
+
+        // Limit the filename display length
+        let displayWidth_change = 0;
+        const check_filename_display = () => {
+            let displayWidth = document.querySelector('.files-display').offsetWidth;
+            console.log(displayWidth);
+            let maxLength = parseInt((displayWidth - 350) / 2.3);
+            const filenames = document.querySelectorAll('.filename');
+
+            if (Math.abs(displayWidth_change - displayWidth) < 250) {
+                return;
+            } else {
+                displayWidth_change = displayWidth;
+            }
+
+            filenames.forEach((f) => {
+                if (f.innerText.length > maxLength) {
+                    f.innerHTML = f.getAttribute('filename').substring(0, maxLength) + '...';
+                } else {
+                    f.innerHTML = f.getAttribute('filename');
+                }
+            })
+        }
+
+        check_filename_display();
+        window.addEventListener('resize', check_filename_display);
+
+        // Show the file info menu
+        document.querySelector('.file-info-menu').style.visibility = 'hidden';
+        const show_fileinfo_menu = (e) => {
+            let rect = e.getBoundingClientRect();
+
+            document.querySelector('.file-info-menu').style.right = String(document.body.offsetWidth - rect.right + 40) + 'px';
+
+            if (rect.top + 15 + document.querySelector('.file-info-menu').offsetHeight > document.body.offsetHeight) {
+                document.querySelector('.file-info-menu').style.borderBottomRightRadius = '0px';
+                document.querySelector('.file-info-menu').style.borderTopRightRadius = '20px';
+                document.querySelector('.file-info-menu').style.top = String(parseInt(rect.bottom - document.querySelector('.file-info-menu').scrollHeight) - 13) + 'px';
+            } else {
+                document.querySelector('.file-info-menu').style.borderBottomRightRadius = '20px';
+                document.querySelector('.file-info-menu').style.borderTopRightRadius = '0px';
+                document.querySelector('.file-info-menu').style.top = String(parseInt(rect.top) + 15) + 'px';
+            }
+
+            document.querySelector('.file-info-menu').style.transitionDuration = '0.2s';
+            document.querySelector('.file-info-menu').style.animation = 'expand 0.5s forwards';
+            document.querySelector('.file-info-menu').style.visibility = 'visible';
+
+            document.querySelector('.file-info-menu button.view').onclick = () => {
+                redirect('./login?page=personal&path=' + e.getAttribute('filepath'))
+            };
+
+            document.querySelector('.file-info-menu button.download').onclick = () => {
+                redirect('./login?page=personal&path=' + e.getAttribute('filepath') + '&download=1')
+            };
+        }
     </script>
 {% endblock %}

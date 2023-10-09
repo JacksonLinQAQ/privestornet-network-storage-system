@@ -5,10 +5,205 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com"></script>
         <title>{% block title %}{% endblock %}</title>
+        <style>
+            /* Theme Config */
+            :root {
+                transition-duration: 0.3s;
+                --wallpaper: url("{{ url_for('static', filename='images/theme-wallpaper.png') }}");
+                --theme-flower: url("{{ url_for('static', filename='images/theme-flower.png') }}");
+                --theme-color-ultralight: rgba(255, 255, 255, .2);
+                --theme-color-light: rgba(255, 255, 255, .3);
+                --theme-color-medium: rgba(255, 255, 255, .5);
+                --theme-color-dark: rgba(255, 255, 255, .7);
+                --theme-color-solid: rgba(255, 255, 255, 1);
+                --theme-text-color-solid: rgba(0, 0, 0, 1);
+                --theme-color-highlight: #00BDE7;
+                --theme-color-hover-highlight: #76d4f5;
+                --theme-color-content: #646464;
+                --theme-color-placeholder: #a1a1a1;
+                --image-add: url("{{ url_for('static', filename='images/add.png') }}");
+                --image-admin: url("{{ url_for('static', filename='images/admin.png') }}");
+                --image-close: url("{{ url_for('static', filename='images/close.png') }}");
+                --image-file: url("{{ url_for('static', filename='images/file.png') }}");
+                --image-folder: url("{{ url_for('static', filename='images/folder.png') }}");
+                --image-hide: url("{{ url_for('static', filename='images/hide.png') }}");
+                --image-home: url("{{ url_for('static', filename='images/home.png') }}");
+                --image-left-arrow: url("{{ url_for('static', filename='images/left-arrow.png') }}");
+                --image-login: url("{{ url_for('static', filename='images/login.png') }}");
+                --image-logout: url("{{ url_for('static', filename='images/logout.png') }}");
+                --image-more: url("{{ url_for('static', filename='images/more.png') }}");
+                --image-personal: url("{{ url_for('static', filename='images/personal.png') }}");
+                --image-public: url("{{ url_for('static', filename='images/public.png') }}");
+                --image-right-arrow: url("{{ url_for('static', filename='images/right-arrow.png') }}");
+                --image-settings: url("{{ url_for('static', filename='images/settings.png') }}");
+                --image-slash: url("{{ url_for('static', filename='images/slash.png') }}");
+                --image-upload-file: url("{{ url_for('static', filename='images/upload-file.png') }}");
+                --image-upload-folder: url("{{ url_for('static', filename='images/upload-folder.png') }}");
+                --image-user: url("{{ url_for('static', filename='images/user.png') }}");
+                --image-view: url("{{ url_for('static', filename='images/view.png') }}");
+                --image-download: url("{{ url_for('static', filename='images/download.png') }}");
+                --image-delete: url("{{ url_for('static', filename='images/delete.png') }}");
+                --image-move: url("{{ url_for('static', filename='images/move.png') }}");
+                --image-rename: url("{{ url_for('static', filename='images/rename.png') }}");
+                --image-share: url("{{ url_for('static', filename='images/share.png') }}");
+                --image-properties: url("{{ url_for('static', filename='images/properties.png') }}");
+            }
+
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    --wallpaper: url("{{ url_for('static', filename='images/theme-wallpaper-dark.png') }}");
+                    --theme-flower: url("{{ url_for('static', filename='images/theme-flower-dark.png') }}");
+                    --theme-color-ultralight: rgba(75, 75, 75, 0.2);
+                    --theme-color-light: rgba(75, 75, 75, .3);
+                    --theme-color-medium: rgba(75, 75, 75, .5);
+                    --theme-color-dark: rgba(75, 75, 75, .7);
+                    --theme-color-solid: rgba(75, 75, 75, 1);
+                    --theme-text-color-solid: rgba(255, 255, 255, 1);
+                    --theme-color-highlight: #00BDE7;
+                    --theme-color-hover-highlight: #2496c0;
+                    --theme-color-content: #a1a1a1;
+                    --theme-color-placeholder: #f0f0f0;
+                    --image-add: url("{{ url_for('static', filename='images/add-white.png') }}");
+                    --image-admin: url("{{ url_for('static', filename='images/admin-white.png') }}");
+                    --image-close: url("{{ url_for('static', filename='images/close-white.png') }}");
+                    --image-file: url("{{ url_for('static', filename='images/file-white.png') }}");
+                    --image-folder: url("{{ url_for('static', filename='images/folder-white.png') }}");
+                    --image-hide: url("{{ url_for('static', filename='images/hide-white.png') }}");
+                    --image-home: url("{{ url_for('static', filename='images/home-white.png') }}");
+                    --image-left-arrow: url("{{ url_for('static', filename='images/left-arrow-white.png') }}");
+                    --image-login: url("{{ url_for('static', filename='images/login-white.png') }}");
+                    --image-logout: url("{{ url_for('static', filename='images/logout-white.png') }}");
+                    --image-more: url("{{ url_for('static', filename='images/more-white.png') }}");
+                    --image-personal: url("{{ url_for('static', filename='images/personal-white.png') }}");
+                    --image-public: url("{{ url_for('static', filename='images/public-white.png') }}");
+                    --image-right-arrow: url("{{ url_for('static', filename='images/right-arrow-white.png') }}");
+                    --image-settings: url("{{ url_for('static', filename='images/settings-white.png') }}");
+                    --image-slash: url("{{ url_for('static', filename='images/slash-white.png') }}");
+                    --image-upload-file: url("{{ url_for('static', filename='images/upload-file-white.png') }}");
+                    --image-upload-folder: url("{{ url_for('static', filename='images/upload-folder-white.png') }}");
+                    --image-user: url("{{ url_for('static', filename='images/user-white.png') }}");
+                    --image-view: url("{{ url_for('static', filename='images/view-white.png') }}");
+                    --image-download: url("{{ url_for('static', filename='images/download-white.png') }}");
+                    --image-delete: url("{{ url_for('static', filename='images/delete-white.png') }}");
+                    --image-move: url("{{ url_for('static', filename='images/move-white.png') }}");
+                    --image-rename: url("{{ url_for('static', filename='images/rename-white.png') }}");
+                    --image-share: url("{{ url_for('static', filename='images/share-white.png') }}");
+                    --image-properties: url("{{ url_for('static', filename='images/properties-white.png') }}");
+                }
+            }
+
+            .img-theme-flower {
+                content: var(--theme-flower);
+            }
+
+            .img-add {
+                content: var(--image-add);
+            }
+
+            .img-admin {
+                content: var(--image-admin);
+            }
+
+            .img-close {
+                content: var(--image-close);
+            }
+
+            .img-file {
+                content: var(--image-file);
+            }
+
+            .img-folder {
+                content: var(--image-folder);
+            }
+
+            .img-hide {
+                content: var(--image-hide);
+            }
+
+            .img-home {
+                content: var(--image-home);
+            }
+
+            .img-left-arrow {
+                content: var(--image-left-arrow);
+            }
+
+            .img-right-arrow {
+                content: var(--image-right-arrow);
+            }
+
+            .img-login {
+                content: var(--image-login);
+            }
+
+            .img-logout {
+                content: var(--image-logout);
+            }
+
+            .img-user {
+                content: var(--image-user);
+            }
+
+            .img-view {
+                content: var(--image-view);
+            }
+
+            .img-more {
+                content: var(--image-more);
+            }
+
+            .img-personal {
+                content: var(--image-personal);
+            }
+
+            .img-public {
+                content: var(--image-public);
+            }
+
+            .img-settings {
+                content: var(--image-settings);
+            }
+
+            .img-slash {
+                content: var(--image-slash);
+            }
+
+            .img-upload-file {
+                content: var(--image-upload-file);
+            }
+
+            .img-upload-folder {
+                content: var(--image-upload-folder);
+            }
+
+            .img-download {
+                content: var(--image-download);
+            }
+
+            .img-delete {
+                content: var(--image-delete);
+            }
+
+            .img-move {
+                content: var(--image-move);
+            }
+
+            .img-rename {
+                content: var(--image-rename);
+            }
+
+            .img-share {
+                content: var(--image-share);
+            }
+
+            .img-properties {
+                content: var(--image-properties);
+            }
+        </style>
         {% block head %}{% endblock %}
     </head>
-    <body class="bg-gray-200 font-['Helvetica'] bg-[url('{{ url_for('static', filename='images/wallpaper.png') }}')]">
-        <nav class="bg-white bg-opacity-50 p-4 shadow-md">
+    <body class="bg-gray-200 text-[color:var(--theme-text-color-solid)] font-['Helvetica'] bg-[image:var(--wallpaper)] bg-center bg-no-repeat">
+        <nav class="bg-[color:var(--theme-color-light)] p-4 shadow-md">
             <div class="flex justify-between">
                 <div class="mx-4 max-sm:mx-2">
                     <a href="./">
@@ -16,26 +211,26 @@
                     </a>
                 </div>
                 <div class="mx-4 max-sm:mx-2">
-                    <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./">
-                        <img class="inline-block align-middle" width="22px" height="22px" src="{{ url_for('static', filename='images/home.png') }}">
+                    <a class="ml-6 p-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./">
+                        <img class="inline-block align-middle img-home" width="22px" height="22px">
                         <span class="inline-block ml-1 align-middle max-sm:hidden">Home</span>
                     </a>
-                    <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./">
-                        <img class="inline-block align-middle" width="20px" height="20px" src="{{ url_for('static', filename='images/settings.png') }}">
+                    <a class="ml-6 p-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./">
+                        <img class="inline-block align-middle img-settings" width="20px" height="20px">
                         <span class="inline-block ml-1 align-middle max-sm:hidden">Settings</span>
                     </a>
                     {% if user.is_login() %}
-                        <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./login">
-                            <img class="inline-block align-middle" width="20px" height="20px" src="{{ url_for('static', filename='images/user.png') }}">
+                        <a class="ml-6 p-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./login">
+                            <img class="inline-block align-middle img-user" width="20px" height="20px">
                             <span class="inline-block ml-1 align-middle">{{ user.user.username }}</span>
                         </a>
-                        <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./logout">
-                            <img class="inline-block align-middle" width="20px" height="20px" src="{{ url_for('static', filename='images/logout.png') }}">
+                        <a class="ml-6 p-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./logout">
+                            <img class="inline-block align-middle img-logout" width="20px" height="20px">
                             <span class="inline-block ml-1 align-middle max-sm:hidden">Log Out</span>
                         </a>
                     {% else %}
-                        <a class="ml-6 p-2 hover:bg-sky-500/10 rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./login">
-                            <img class="inline-block align-middle" width="20px" height="20px" src="{{ url_for('static', filename='images/login.png') }}">
+                        <a class="ml-6 p-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./login">
+                            <img class="inline-block align-middle img-login" width="20px" height="20px">
                             <span class="inline-block ml-1 align-middle max-sm:hidden">Log In</span>
                         </a>
                     {% endif %}
@@ -43,8 +238,32 @@
             </div>
         </nav>
         {% block body %}{% endblock %}
+        <img class="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-[-1] w-[70%] max-sm:w-[90%] h-auto img-theme-flower drop-shadow-2xl">
+
+        <style>
+            /* width */
+            ::-webkit-scrollbar {
+                width: 12px;
+                padding: 1px;
+            }
+
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                background: #c3c3c3;
+                border-radius: 999px;
+            }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: #a7a7a7;
+            }
+        </style>
 
         <script>
+            if (!getComputedStyle(document.documentElement).getPropertyValue('--wallpaper').includes('theme')) {
+                document.querySelector('.img-theme-flower').style.display = 'none';
+            }
+
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const error = urlParams.get('error');
@@ -52,10 +271,14 @@
 
             if (error) {
                 alert(error);
+                urlParams.delete('error');
+                location.replace('/login?' + urlParams.toString());
             }
 
             if (msg) {
                 alert(msg);
+                urlParams.delete('msg');
+                location.replace('/login?' + urlParams.toString());
             }
         </script>
     </body>

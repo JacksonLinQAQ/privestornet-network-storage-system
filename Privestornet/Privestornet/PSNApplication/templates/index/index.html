@@ -9,9 +9,9 @@
         </div>
         <div class="w-[720px] max-lg:w-[420px] max-xl:w-[630px] max-sm:w-[290px]">
             <div class="title leading-[70px] text-[64px] max-lg:text-[36px] max-sm:text-[25.5px] max-xl:text-[56px] font-bold h-[70px] max-sm:h-[56px] max-lg:h-[60px] max-xl:h-[62px] overflow-hidden">
-                <span show-title class="absolute">New <span>Privestornet</span> App</span>
-                <span class="absolute"><span>Private</span> & Safe</span>
-                <span class="absolute"><span>Multi-user</span> Management</span>
+                <span show-title class="absolute">New <span highlight>Privestornet</span> App</span>
+                <span class="absolute"><span highlight>Private</span> & Safe</span>
+                <span class="absolute"><span highlight>Multi-user</span> Management</span>
             </div>
             <div class="content text-[26px] max-xl:text-[20px] max-lg:text-[18px] max-sm:text-[15px] h-[78px] max-sm:h-[70px] max-lg:h-[72px] max-xl:h-[74px] overflow-hidden">
                 <span show-content class="absolute">Your best tool to build your own<br>network storage system</span>
@@ -73,12 +73,12 @@
         }
 
         .title span[show-title] {
-            color:  #0B0B0B;
+            color: var(--theme-text-color-solid);
             transform: translateY(0);
         }
 
-        .title span[show-title] span {
-            color: #00BDE7;
+        .title span[show-title] > span[highlight] {
+            color: var(--theme-color-highlight);
         }
 
         .title span[up-title] span {
@@ -98,7 +98,7 @@
         }
 
         .content span[show-content] {
-            color:  #646464;
+            color:  var(--theme-color-content);
             transform: translateY(0);
         }
 

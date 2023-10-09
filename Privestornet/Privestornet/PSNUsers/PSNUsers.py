@@ -27,6 +27,7 @@ class Path:
         self.path = path
         self.fullpath = None
         self.content: list['Path'] = [] if self.pathtype == 'root' or self.pathtype == 'folder' else None
+        self.content_dict: dict[str, 'Path'] = {} if self.pathtype == 'root' or self.pathtype == 'folder' else None
         self.username = username if self.pathsource == 'personal' else None
 
         # Run self-check process
@@ -79,8 +80,10 @@ class Path:
             for f in os.listdir(self.fullpath):
                 if os.path.isdir(concatpath(self.fullpath, f)):
                     self.content.append(PersonalFolder(concatpath(self.path, f), self.username, f) if self.pathsource == 'personal' else PublicFolder(concatpath(self.path, f), f))
+                    self.content_dict.update({f: self.content[-1]})
                 elif os.path.isfile(concatpath(self.fullpath, f)):
                     self.content.append(PersonalFile(concatpath(self.path, f), self.username, f) if self.pathsource == 'personal' else PublicFile(concatpath(self.path, f), f))
+                    self.content_dict.update({f: self.content[-1]})
 
             return (True, self.content)
         
@@ -182,24 +185,27 @@ class Path:
             Find a file or folder by path quickly
         '''
         self.scan_content()
+        if self.pathtype == 'root':
+            path = path.split('/')
+            data: Path = None
 
-        path = path.split('/')
+            if path[0] == '':
+                return self
 
-        data: Path = None
+            for p in path:
+                if data:
+                    data = data.content_dict.get(p)
+                    if not data:
+                        return None
+                else:
+                    data = self.content_dict.get(p)
+                    if not data:
+                        return None
 
-        if self.pathtype == 'root' and path[0] == '':
-            return self
+                if not data:
+                    return None
 
-        for p in path:
-            if data:
-                data = data.find(name = p)
-            else:
-                data = self.find(name = p)
-
-            if not data:
-                return None
-
-        return data
+            return data
 
     def find(self, name: str = None, path: str = None):
         '''

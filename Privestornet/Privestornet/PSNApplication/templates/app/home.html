@@ -6,7 +6,7 @@
     <a class="redirect hidden"></a>
     <h1 class="font-bold text-[24px] mb-8">Home</h1>
     <div class="flex max-sm:flex-col gap-x-[20px] max-sm:gap-y-[10px] flex-wrap">
-        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl shadow-sm">
+        <div class="p-4 h-fit bg-[color:var(--theme-color-light)] rounded-2xl shadow-sm">
             <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">My Device</h2>
             <div class="flex gap-x-[18px]">
                 <img class="block w-20 h-20 max-xl:w-16 max-xl:h-16 max-lg:w-14 max-lg:h-14 max-sm:w-14 max-sm:h-14" src="{{ url_for('static', filename='images/my-privestornet.png') }}">
@@ -17,13 +17,13 @@
                 </div>
             </div>
         </div>
-        <div class="p-4 h-fit bg-white bg-opacity-50 rounded-2xl hover:bg-opacity-20 hover:cursor-pointer shadow-sm duration-300">
-            <button onclick="redirect('./login?page=myaccount')">
-                <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">My Account</h2>
+        <div class="p-4 h-fit bg-[color:var(--theme-color-light)] rounded-2xl hover:bg-[color:var(--theme-color-ultralight)] hover:cursor-pointer shadow-sm duration-300">
+            <button class="w-full" onclick="redirect('./login?page=myaccount')">
+                <h2 class="text-[20px] text-left max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-bold mb-4">My Account</h2>
                 <div class="flex gap-x-[18px]">
-                    <img class="block w-14 h-14 max-xl:w-12 max-xl:h-12 max-lg:w-10 max-lg:h-10 max-sm:w-10 max-sm:h-10" src="{{ url_for('static', filename='images/user.png') }}">
+                    <img class="block w-14 h-14 max-xl:w-12 max-xl:h-12 max-lg:w-10 max-lg:h-10 max-sm:w-10 max-sm:h-10 img-user">
                     <div>
-                        <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-medium">{{ user.user.username }}</h2>
+                        <h2 class="text-[20px] max-xl:text-[18px] max-lg:text-[16px] max-sm:text-[16px] font-medium text-left">{{ user.user.username }}</h2>
                         <h3 class="text-[14px] max-xl:text-[12px] max-lg:text-[12px] max-sm:text-[12px] font-medium">{{ "Administrator" if user.user.is_administrator else "User" }}</h3>
                     </div>
                 </div>
