@@ -5,7 +5,10 @@
 {% block body %}
     <div class="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex flex-col justify-center items-center gap-y-[20px]">
         <h1 class="text-[28px] font-bold">File or folder not found</h1>
-        <a href="./login?page=personal" class="text-center p-2 w-[120px] max-sm:w-full rounded-full outline-none shadow-sm bg-[color:var(--theme-color-solid)] duration-300 hover:bg-[color:var(--theme-color-hover-highlight)]">Back</a>
+        <a href="./login?page=personal" class="text-center p-2 w-[120px] max-sm:w-full rounded-full outline-none shadow-sm bg-[color:var(--theme-color-solid)] duration-300 hover:bg-[color:var(--theme-color-hover-highlight)]">
+            <img class="inline-block w-auto h-4 img-left-arrow align-middle">
+            <span class="align-middle ml-2">Back</span>
+        </a>
     </div>
 
     <style>

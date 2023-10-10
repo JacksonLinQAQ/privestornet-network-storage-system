@@ -21,7 +21,7 @@
 
             <h2 class="paths font-semibold whitespace-nowrap">
                 <span>
-                    <a class="align-middle p-1 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}">Personal</a>
+                    <a class="align-middle p-1 px-2 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}">Personal</a>
                     <img class="inline-block w-auto h-4 align-middle img-right-arrow">
                 </span>
 
@@ -32,7 +32,7 @@
                 {% for idx, p in path_iter %}
                     {% if p %}
                         <span class="path">
-                            <a class="align-middle p-1 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
+                            <a class="align-middle p-1 px-2 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
                             <span class="align-middle">
                                 <img class="inline-block w-auto h-4 align-middle img-slash">
                             </span>
@@ -206,6 +206,7 @@
             })
         }
 
+        // Location box display event
         check_paths_display();
         window.addEventListener('resize', check_paths_display);
 
@@ -218,6 +219,7 @@
             location_box.style.display = "block";
         })
 
+        // Upload options event
         document.querySelector('.upload-options').style.display = 'none';
 
         document.querySelector('.upload-btn').addEventListener('click',  () => {
@@ -232,6 +234,7 @@
             }
         })
 
+        // Click background unfocus event
         document.addEventListener('click', (event) => {
             if (!(document.querySelector('.upload-btn').contains(event.target))) {
                 document.querySelector('.upload-options').style.animation = 'shrink 0.5s';
@@ -250,6 +253,7 @@
             }
         });
 
+        // Upload data event
         document.querySelector('.upload-file-btn').addEventListener('click', () => {
             document.querySelector('.upload-data-form').action = "./upload?dst=personal&type=file&path={{ '/'.join(path) }}";
             document.querySelector('.upload-data-form input[name="upload-data"').accept = "*";
@@ -319,6 +323,10 @@
 
             document.querySelector('.file-info-menu button.download').onclick = () => {
                 redirect('./login?page=personal&path=' + e.getAttribute('filepath') + '&download=1')
+            };
+
+            document.querySelector('.file-info-menu button.delete').onclick = () => {
+                redirect('./delete?target=personal&path=' + e.getAttribute('filepath'))
             };
         }
     </script>

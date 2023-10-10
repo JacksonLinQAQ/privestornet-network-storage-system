@@ -75,6 +75,7 @@ class Path:
         if self.pathtype == 'root' or self.pathtype == 'folder':
             # Clear the old content data
             self.content.clear()
+            self.content_dict.clear()
 
             # Scan and save each file or directory as Path object
             for f in os.listdir(self.fullpath):

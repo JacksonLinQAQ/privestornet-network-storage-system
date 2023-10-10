@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="icon" type="image/x-icon" href="./favicon.ico">
         <title>{% block title %}{% endblock %}</title>
         <style>
             /* Theme Config */
@@ -47,6 +48,7 @@
                 --image-rename: url("{{ url_for('static', filename='images/rename.png') }}");
                 --image-share: url("{{ url_for('static', filename='images/share.png') }}");
                 --image-properties: url("{{ url_for('static', filename='images/properties.png') }}");
+                --image-shared-files: url("{{ url_for('static', filename='images/shared-files.png') }}");
             }
 
             @media (prefers-color-scheme: dark) {
@@ -89,6 +91,7 @@
                     --image-rename: url("{{ url_for('static', filename='images/rename-white.png') }}");
                     --image-share: url("{{ url_for('static', filename='images/share-white.png') }}");
                     --image-properties: url("{{ url_for('static', filename='images/properties-white.png') }}");
+                    --image-shared-files: url("{{ url_for('static', filename='images/shared-files-white.png') }}");
                 }
             }
 
@@ -198,6 +201,10 @@
 
             .img-properties {
                 content: var(--image-properties);
+            }
+
+            .img-shared-files {
+                content: var(--image-shared-files);
             }
         </style>
         {% block head %}{% endblock %}

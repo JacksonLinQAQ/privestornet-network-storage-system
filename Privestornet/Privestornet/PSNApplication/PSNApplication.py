@@ -15,6 +15,10 @@ PSN_APP = Flask(__name__)
 PSN_SYS = PSNSystem.System()
 
 # Process HTTP requests
+@PSN_APP.route('/favicon.ico')
+def favicon():
+    return send_file('./favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 @PSN_APP.route('/')
 @PSN_APP.route('/index')
 def index():
@@ -27,83 +31,116 @@ def login():
         PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
         user = PSN_SYS.find_user(request.remote_addr)
 
-        # If the user is not logged in yet
-        if not user.is_login():
-            # If username and password is not empty
-            if request.form['username'] and request.form['password']:
-                status = user.login(request.form['username'], request.form['password'])
-                # If the user logs in successfully
-                if status[0]:
-                    PSN_SYS.log(request.remote_addr, f'User \'{user.user.username}\' logged in')
-                    return redirect('./login?page=home')
-                else:
-                    PSN_SYS.error(request.remote_addr, status[1])
-                    return redirect(f'./login?error={status[1]}')
+        # If the user is logged in
+        if user.is_login():
+            return redirect('./login?page=home')
+        
+        # If username or password is empty
+        if not (request.form['username'] and request.form['password']):
             PSN_SYS.error(request.remote_addr, 'Invaild username or password')
             return redirect(f'./login?error=Invaild%20username%20or%20password')
-        return redirect('./login?page=home')
+
+        status = user.login(request.form['username'], request.form['password'])
+
+        # If the user logs in successfully
+        if status[0]:
+            PSN_SYS.log(request.remote_addr, f'User \'{user.user.username}\' logged in')
+            return redirect('./login?page=home')
+        else:
+            PSN_SYS.error(request.remote_addr, status[1])
+            return redirect(f'./login?error={status[1]}')
 
     elif request.method == 'GET':
         PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
         user = PSN_SYS.find_user(request.remote_addr)
-        # If the user is logged in
-        if user.is_login():
-            page = request.args.get('page')
-            if not page:
-                return redirect('./login?page=home')
-            else:
-                try:
-                    if page == 'personal' or page == 'public':
-                        path = request.args.get('path')
-                        if path:
-                            path = path.strip('/')
-                        else:
-                            path = ''
-                        user.path = path
 
-                        if page == 'personal' and user.user.personal_data.quickfind(path=path):
-                            data = user.user.personal_data.quickfind(path=path)
-                        elif page == 'public' and user.user.public_data.quickfind(path=path):
-                            data = user.user.public_data.quickfind(path=path)
-                        else:
-                            data = None
+        # If the user is not logged in
+        if not user.is_login():
+            return render_template('login/login.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config)
 
-                        if data:
-                            if data.pathtype == 'file':
-                                if request.args.get('download'):
-                                    return send_file(os.path.abspath(data.fullpath), as_attachment=True)
-                                else:
-                                    return send_file(os.path.abspath(data.fullpath))
-                            elif data.pathtype == 'folder':
-                                if request.args.get('download'):
-                                    shutil.make_archive(f'./Privestornet/PSNPkgDownload/{os.path.splitext(data.name)[0]}', 'zip', data.fullpath)
-                                    return send_file(os.path.abspath(f'./Privestornet/PSNPkgDownload/{os.path.splitext(data.name)[0]}.zip'), as_attachment=True)
+        # Check the page
+        page = request.args.get('page')
+        if not page:
+            return redirect('./login?page=home')
 
-                            path = path.split('/')
-                            path_iter = list(enumerate(path))
-
-                        else:
-                            path = None
-                            path_iter = None
-                            data = None
-                            return render_template(f'error/file-not-found.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, path=path, path_iter=path_iter, data=data), 404
-                    else:
-                        path = None
-                        path_iter = None
-                        data = None
+        else:
+            try:
+                # If the page is not personal or public storage
+                if not (page == 'personal' or page == 'public'):
+                    path = None
+                    path_iter = None
+                    data = None
                     return render_template(f'app/{page}.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, path=path, path_iter=path_iter, data=data)
-                except TemplateNotFound:
-                    return redirect('./login?page=home')
-        return render_template('login/login.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config)
+
+                # If the page is personal or public storage
+                # Then check the path
+                path = request.args.get('path')
+
+                # Format the path
+                if path:
+                    path = path.strip('/')
+                else:
+                    path = ''
+
+                # Set the user current path
+                user.path = path
+
+                # Find the data of the path
+                if page == 'personal' and user.user.personal_data.quickfind(path=path):
+                    data = user.user.personal_data.quickfind(path=path)
+                elif page == 'public' and user.user.public_data.quickfind(path=path):
+                    data = user.user.public_data.quickfind(path=path)
+                else:
+                    data = None
+
+                # If the data not exists
+                if not data:
+                    return render_template(f'error/file-not-found.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, path=path, path_iter=path_iter, data=data), 404
+
+                # If the data exists
+                # Then check the path type and return it
+
+                if not (data.pathtype == 'root' or data.pathtype == 'folder' or data.pathtype == 'file'):
+                    path = None
+                    path_iter = None
+                    data = None
+                    return render_template(f'error/file-not-found.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, path=path, path_iter=path_iter, data=data), 404
+
+                if data.pathtype == 'file':
+                    # If the user needs to download the data
+                    if request.args.get('download'):
+                        # Then return it
+                        return send_file(os.path.abspath(data.fullpath), as_attachment=True)
+                    # Otherwise, just only return the data preview
+                    return send_file(os.path.abspath(data.fullpath))
+
+                elif data.pathtype == 'folder':
+                    # If the user needs to download the data
+                    # Then create a zip file archive and return it
+                    if request.args.get('download'):
+                        shutil.make_archive(f'./Privestornet/PSNPkgDownload/{os.path.splitext(data.name)[0]}', 'zip', data.fullpath)
+                        return send_file(os.path.abspath(f'./Privestornet/PSNPkgDownload/{os.path.splitext(data.name)[0]}.zip'), as_attachment=True)
+
+                # Format the path
+                path = path.split('/')
+                path_iter = list(enumerate(path))
+
+                # The data has been checked as a folder
+                # Return all data of the folder path
+                return render_template(f'app/{page}.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, path=path, path_iter=path_iter, data=data)
+            except TemplateNotFound:
+                return redirect('./login?page=home')
 
 @PSN_APP.route('/logout')
 def logout():
     PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
     user = PSN_SYS.find_user(request.remote_addr)
     username = user.user.username
+
     # If the user is logged in
     if user.is_login():
         user.logout()
+
     PSN_SYS.log(request.remote_addr, f'User \'{username}\' logged out')
     return redirect(f'./login?msg=User%20\'{username}\'%20logged%20out')
 
@@ -111,61 +148,65 @@ def logout():
 def change_username():
     PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
     user = PSN_SYS.find_user(request.remote_addr)
-    # If the user is logged in
-    if user.is_login():
-        username = request.form.get('username')
-        confirm_username = request.form.get('confirm-username')
 
-        # If the new username is the same as the confirm new username
-        if username == confirm_username:
-            # If the new username doesn't contain any space characters
-            if not (' ' in username or username == ''):
-                # If the new username isn't the same as the old one
-                if not username == user.user.username:
-                    PSN_SYS.log(request.remote_addr, f'User \'{user.user.username}\' changed username to \'{username}\'')
-                    user.user.modify_data(username = username)
-                    return redirect(f'./login?page={request.args.get("page")}&msg=Username%20changed%20to%20\'{username}\'')
+    # If the user is not logged in
+    if not user.is_login():
+        return redirect(f'./login')
 
-                PSN_SYS.error(request.remote_addr, f'The new username \'{username}\' must not be the same as the old username \'{user.user.username}\'')
-                return redirect(f'./login?page={request.args.get("page")}&error=The%20new%20username%20must%20not%20be%20the%20same%20as%20the%20old%20username')
+    username = request.form.get('username')
+    confirm_username = request.form.get('confirm-username')
 
-            PSN_SYS.error(request.remote_addr, f'Invaild username \'{username}\'')
-            return redirect(f'./login?page={request.args.get("page")}&error=Invaild%20username%20\'{username}\'')
-
+    # If the new username is not the match as the confirm new username
+    if not username == confirm_username:
         PSN_SYS.error(request.remote_addr, f'New username \'{username}\' and confirm new username \'{confirm_username}\' do not match')
         return redirect(f'./login?page={request.args.get("page")}&error=New%20username%20and%20confirm%20new%20username%20do%20not%20match')
 
-    return redirect(f'./login')
+    # If the new username contains any space characters or it is empty
+    if (' ' in username or username == ''):
+        PSN_SYS.error(request.remote_addr, f'Invaild username \'{username}\'')
+        return redirect(f'./login?page={request.args.get("page")}&error=Invaild%20username%20\'{username}\'')
+
+    # If the new username is the same as the old one
+    if username == user.user.username:
+        PSN_SYS.error(request.remote_addr, f'The new username \'{username}\' must not be the same as the old username \'{user.user.username}\'')
+        return redirect(f'./login?page={request.args.get("page")}&error=The%20new%20username%20must%20not%20be%20the%20same%20as%20the%20old%20username')
+
+    # Otherwise, just change the username
+    PSN_SYS.log(request.remote_addr, f'User \'{user.user.username}\' changed username to \'{username}\'')
+    user.user.modify_data(username = username)
+    return redirect(f'./login?page={request.args.get("page")}&msg=Username%20changed%20to%20\'{username}\'')
 
 @PSN_APP.route('/change-password', methods=['POST'])
 def change_password():
     PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
     user = PSN_SYS.find_user(request.remote_addr)
-    # If the user is logged in
-    if user.is_login():
-        password = request.form.get('password')
-        confirm_password = request.form.get('confirm-password')
 
-        # If the new password is the same as the confirm new password
-        if password == confirm_password:
-            # If the new password doesn't contain any space characters
-            if not (' ' in password or password == ''):
-                # If the new password isn't the same as the old one
-                if not password == user.user.password:
-                    PSN_SYS.log(request.remote_addr, f'User \'{user.user.password}\' changed password to \'{password}\'')
-                    user.user.modify_data(password = password)
-                    return redirect(f'./login?page={request.args.get("page")}&msg=password%20changed%20to%20\'{password}\'')
+    # If the user is not logged in
+    if not user.is_login():
+        return redirect(f'./login')
 
-                PSN_SYS.error(request.remote_addr, f'The new password \'{password}\' must not be the same as the old password \'{user.user.password}\'')
-                return redirect(f'./login?page={request.args.get("page")}&error=The%20new%20password%20must%20not%20be%20the%20same%20as%20the%20old%20password')
+    password = request.form.get('password')
+    confirm_password = request.form.get('confirm-password')
 
-            PSN_SYS.error(request.remote_addr, f'Invaild password \'{password}\'')
-            return redirect(f'./login?page={request.args.get("page")}&error=Invaild%20password%20\'{password}\'')
-
+    # If the new password is not the match as the confirm new password
+    if not password == confirm_password:
         PSN_SYS.error(request.remote_addr, f'New password \'{password}\' and confirm new password \'{confirm_password}\' do not match')
         return redirect(f'./login?page={request.args.get("page")}&error=New%20password%20and%20confirm%20new%20password%20do%20not%20match')
 
-    return redirect(f'./login')
+    # If the new password contains any space characters or it is empty
+    if (' ' in password or password == ''):
+        PSN_SYS.error(request.remote_addr, f'Invaild password \'{password}\'')
+        return redirect(f'./login?page={request.args.get("page")}&error=Invaild%20password%20\'{password}\'')
+
+    # If the new password is the same as the old one
+    if password == user.user.password:
+        PSN_SYS.error(request.remote_addr, f'The new password \'{password}\' must not be the same as the old password \'{user.user.password}\'')
+        return redirect(f'./login?page={request.args.get("page")}&error=The%20new%20password%20must%20not%20be%20the%20same%20as%20the%20old%20password')
+
+    # Otherwise, just change the password
+    PSN_SYS.log(request.remote_addr, f'User \'{user.user.password}\' changed password to \'{password}\'')
+    user.user.modify_data(password = password)
+    return redirect(f'./login?page={request.args.get("page")}&msg=password%20changed%20to%20\'{password}\'')
 
 @PSN_APP.route('/upload', methods=['POST'])
 def upload():
@@ -173,24 +214,28 @@ def upload():
     if not PSN_SYS.find_user(request.remote_addr).is_login():
         return redirect(f'./login?page={request.args.get("dst")}&error=Please%20login%20first')
 
+    # Get required parameters
     dst = request.args.get('dst')
     path = request.args.get('path')
     all_data = request.files.getlist('upload-data')
     datatype = request.args.get('type')
 
-    if not dst or path == None or not all_data or not datatype:
+    # If the parameters provided are incomplete
+    if not (dst and all_data and datatype) or path == None:
         PSN_SYS.error(request.remote_addr, f'Invaild request')
         return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&error=Invaild%20request')
 
+    # If the upload destination is invaild
     if not (dst == 'personal' or dst == 'public'):
         PSN_SYS.error(request.remote_addr, f'Invaild destination \'{dst}\'')
         return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&error=Invaild%20destination%20\'{dst}\'')
 
-    if not (PSN_SYS.find_user(request.remote_addr).user.personal_data.find(path=path).pathtype == 'root' or PSN_SYS.find_user(request.remote_addr).user.personal_data.find(path=path).pathtype == 'folder'):
+    # If the upload path is invaild
+    if not (PSN_SYS.find_user(request.remote_addr).user.personal_data.find(path=path) and (PSN_SYS.find_user(request.remote_addr).user.personal_data.find(path=path).pathtype == 'root' or PSN_SYS.find_user(request.remote_addr).user.personal_data.find(path=path).pathtype == 'folder')):
         PSN_SYS.error(request.remote_addr, f'Invaild path \'{path}\'')
         return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&error=Invaild%20path%20\'{path}\'')
 
-    # Get absolute path
+    # Otherwise, get the absolute path of the upload path
     if dst == 'personal':
         path = PSN_SYS.find_user(request.remote_addr).user.personal_data.find(path=path).fullpath
     elif dst == 'public':
@@ -200,30 +245,125 @@ def upload():
     unsupported_folders = []
 
     for data in all_data:
+        # If the file in the path
+        if data.filename in os.listdir(path):
+            PSN_SYS.error(request.remote_addr, f'File \'{data.filename}\' already exists')
+            return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&error=File%20\'{data.filename}\'%20already%20exists')
+
         # Save file or folder
         data.save(f'{path}/{data.filename}')
 
-        # Check if data is a folder
+        # If data is a folder
         if datatype == 'folder':
-            if os.path.splitext(data.filename)[1] == '.zip':
-                # Extract the zip folder
-                with zipfile.ZipFile(f'{path}/{data.filename}', 'r') as zip_ref:
-                    os.makedirs(f'{path}/{os.path.splitext(data.filename)[0]}')
-
-                    zipInfo = zip_ref.infolist()
-                    for member in zipInfo:
-                        member.filename = member.filename.encode('cp437').decode('gbk')
-                        zip_ref.extract(member, f'{path}/{os.path.splitext(data.filename)[0]}')
-
-                # Check if the zip file exists, then delete it
-                if os.path.exists(f'{path}/{data.filename}'):
-                    os.remove(f'{path}/{data.filename}')
-            else:
+            # If the extension of the zip file not correct
+            if not os.path.splitext(data.filename)[1] == '.zip':
                 unsupported_folders.append(data.filename)
 
+            # If the folder is exists
+            if os.path.exists(f'{path}/{os.path.splitext(data.filename)[0]}'):
+                # Check if the zip file exists, then delete it
+                if os.path.exists(f'{path}/{data.filename}'):
+                    os.remove(f'{path}/{data.filename}')   
+
+                PSN_SYS.error(request.remote_addr, f'Folder \'{os.path.splitext(data.filename)[0]}\' already exists')
+                return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&error=Folder%20\'{os.path.splitext(data.filename)[0]}\'%20already%20exists')
+
+            # Otherwise, Extract the zip folder
+            with zipfile.ZipFile(f'{path}/{data.filename}', 'r') as zip_ref:
+                os.makedirs(f'{path}/{os.path.splitext(data.filename)[0]}')
+
+                zipInfo = zip_ref.infolist()
+                for member in zipInfo:
+                    member.filename = member.filename.encode('cp437').decode('gbk')
+                    zip_ref.extract(member, f'{path}/{os.path.splitext(data.filename)[0]}')
+
+            # Check if the zip file exists, then delete it
+            if os.path.exists(f'{path}/{data.filename}'):
+                os.remove(f'{path}/{data.filename}')            
+
+    # If there're unsupported folders, then raise error
     if unsupported_folders:
         PSN_SYS.error(request.remote_addr, f'Unsupported folders: \'{", ".join(unsupported_folders)}\'')
         return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&error=Unsupported%20folders:%20\'{",%20".join(unsupported_folders)}\'')
 
+    # Otherwise, return upload success
     PSN_SYS.log(request.remote_addr, f'Upload \'{data.filename}\' to \'{path}\'')
     return redirect(f'./login?page={request.args.get("dst")}&path={request.args.get("path")}&msg=Upload%20success')
+
+@PSN_APP.route('/delete')
+def delete():
+    PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
+    if not PSN_SYS.find_user(request.remote_addr).is_login():
+        return redirect(f'./login?page={request.args.get("target")}&error=Please%20login%20first')
+
+    # Get required parameters
+    path = request.args.get('path')
+    target = request.args.get('target')
+
+    # If the parameters provided are incomplete
+    if not (path and target):
+        PSN_SYS.error(request.remote_addr, f'Invaild request')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20request')
+
+    # Check and find the data
+    if target == 'personal':
+        data = PSN_SYS.find_user(request.remote_addr).user.personal_data.quickfind(path)
+    elif target == 'public':
+        data = PSN_SYS.find_user(request.remote_addr).user.public_data.quickfind(path)
+    else:
+        PSN_SYS.error(request.remote_addr, f'Invaild target \'{target}\'')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20target%20\'{target}\'')
+
+    # If the data not exists
+    if not data:
+        PSN_SYS.error(request.remote_addr, f'Invaild path \'{path}\'')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20path%20\'{path}\'')
+
+    # Otherwise, remove the data and return the result
+    result = data.remove()
+    if result[0]:
+        PSN_SYS.log(request.remote_addr, f'Deleted \'{path}\' successfully')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&msg=Deleted%20\'{path}\'%20successfully')
+    else:
+        PSN_SYS.error(request.remote_addr, result[1])
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error={result[1]}')
+
+@PSN_APP.route('/rename')
+def rename():
+    PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
+    if not PSN_SYS.find_user(request.remote_addr).is_login():
+        return redirect(f'./login?page={request.args.get("target")}&error=Please%20login%20first')
+
+    # Get required parameters
+    path = request.args.get('path')
+    new_name = request.args.get('new-name')
+    target = request.args.get('target')
+
+    # If the parameters provided are incomplete
+    if not (path and target and new_name):
+        PSN_SYS.error(request.remote_addr, f'Invaild request')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20request')
+
+    # Check and find the data
+    if target == 'personal':
+        data = PSN_SYS.find_user(request.remote_addr).user.personal_data.quickfind(path)
+    elif target == 'public':
+        data = PSN_SYS.find_user(request.remote_addr).user.public_data.quickfind(path)
+    else:
+        PSN_SYS.error(request.remote_addr, f'Invaild target \'{target}\'')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20target%20\'{target}\'')
+
+    # If the data not exists
+    if not data:
+        PSN_SYS.error(request.remote_addr, f'Invaild path \'{path}\'')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20path%20\'{path}\'')
+
+    # Otherwise, remove the data and return the result
+    old_path = data.path
+    result = data.rename(new_name)
+    if result[0]:
+        PSN_SYS.log(request.remote_addr, f'Rename \'{old_path}\' to \'{data.path}\' successfully')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&msg=Rename%20\'{old_path}\'%20to%20\'{data.path}\'%20successfully')
+    else:
+        PSN_SYS.error(request.remote_addr, result[1])
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error={result[1]}')
