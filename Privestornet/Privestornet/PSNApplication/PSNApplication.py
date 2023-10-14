@@ -97,6 +97,13 @@ def login():
                 if not data:
                     return render_template(f'error/file-not-found.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, path=path, path_iter=path_iter, data=data), 404
 
+                # Check move parameters
+                if request.args.get('move') == 'null':
+                    return redirect(f'./login?page={page}&path={path}')
+
+                if user.accessed_page[-2][1].get('move') and user.accessed_page[-2][1]['move'] != 'null' and not request.args.get('move'):
+                    return redirect(f'./login?page={page}&path={path}&move={user.accessed_page[-2][1]["move"]}')
+
                 # If the data exists
                 # Then check the path type and return it
 
@@ -328,7 +335,7 @@ def delete():
         PSN_SYS.error(request.remote_addr, result[1])
         return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error={result[1]}')
 
-@PSN_APP.route('/rename')
+@PSN_APP.route('/rename', methods=['POST'])
 def rename():
     PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
     if not PSN_SYS.find_user(request.remote_addr).is_login():
@@ -336,7 +343,7 @@ def rename():
 
     # Get required parameters
     path = request.args.get('path')
-    new_name = request.args.get('new-name')
+    new_name = request.form['new-name']
     target = request.args.get('target')
 
     # If the parameters provided are incomplete
@@ -364,6 +371,46 @@ def rename():
     if result[0]:
         PSN_SYS.log(request.remote_addr, f'Rename \'{old_path}\' to \'{data.path}\' successfully')
         return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&msg=Rename%20\'{old_path}\'%20to%20\'{data.path}\'%20successfully')
+    else:
+        PSN_SYS.error(request.remote_addr, result[1])
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error={result[1]}')
+
+@PSN_APP.route('/move')
+def move():
+    PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
+    if not PSN_SYS.find_user(request.remote_addr).is_login():
+        return redirect(f'./login?page={request.args.get("target")}&error=Please%20login%20first')
+
+    # Get required parameters
+    path = request.args.get('path')
+    target = request.args.get('target')
+    dst = request.args.get('dst')
+
+    # If the parameters provided are incomplete
+    if not (path and target and dst != None):
+        PSN_SYS.error(request.remote_addr, 'Invaild parameters')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20parameters')
+
+    # Check and find the data
+    if target == 'personal':
+        data = PSN_SYS.find_user(request.remote_addr).user.personal_data.quickfind(path)
+    elif target == 'public':
+        data = PSN_SYS.find_user(request.remote_addr).user.public_data.quickfind(path)
+    else:
+        PSN_SYS.error(request.remote_addr, f'Invaild target \'{target}\'')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20target%20\'{target}\'')
+
+    # If the data not exists
+    if not data:
+        PSN_SYS.error(request.remote_addr, f'Invaild path \'{path}\'')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20path%20\'{path}\'')
+
+    # Otherwise, move the data to the destination path and return the result
+    old_path = data.path
+    result = data.move(dst)
+    if result[0]:
+        PSN_SYS.log(request.remote_addr, f'Move \'{old_path}\' to \'{data.path}\' successfully')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&msg=Move%20\'{old_path}\'%20to%20\'{data.path}\'%20successfully')
     else:
         PSN_SYS.error(request.remote_addr, result[1])
         return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error={result[1]}')

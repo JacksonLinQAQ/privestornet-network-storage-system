@@ -64,7 +64,7 @@ class AccessedUser:
         self.user: User = None
         self.users: Users = users
         self.date = datetime.datetime.now().strftime(r'%Y-%m-%d %H:%M:%S')
-        self.accessed_page: list[str] = []
+        self.accessed_page: list[tuple[str, dict]] = []
 
     def is_login(self):
         '''

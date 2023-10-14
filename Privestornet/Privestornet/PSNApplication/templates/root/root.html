@@ -209,7 +209,7 @@
         </style>
         {% block head %}{% endblock %}
     </head>
-    <body class="bg-gray-200 text-[color:var(--theme-text-color-solid)] font-['Helvetica'] bg-[image:var(--wallpaper)] bg-center bg-no-repeat">
+    <body class="bg-gray-200 text-[color:var(--theme-text-color-solid)] font-['Helvetica'] bg-[image:var(--wallpaper)] bg-center bg-no-repeat overflow-hidden">
         <nav class="bg-[color:var(--theme-color-light)] p-4 shadow-md">
             <div class="flex justify-between">
                 <div class="mx-4 max-sm:mx-2">
@@ -272,7 +272,7 @@
             }
 
             const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
+            let urlParams = new URLSearchParams(queryString);
             const error = urlParams.get('error');
             const msg = urlParams.get('msg');
 

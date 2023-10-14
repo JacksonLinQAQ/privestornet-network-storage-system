@@ -160,7 +160,24 @@ class Path:
         self.scan_content()
         if self.pathtype != 'root':
             # Find the object of the location
-            location_obj = Path(self.pathsource, 'folder', location, os.path.split(location)[1], self.username)
+            if self.pathsource == 'personal':
+                if location == '':
+                    location_obj = PersonalRoot(self.username)
+                else:
+                    location_obj = PersonalFolder(location, self.username, os.path.split(location)[1])
+
+            elif self.pathsource == 'public':
+                if location == '':
+                    location_obj = PublicRoot()
+                else:
+                    location_obj = PublicFolder(location, os.path.split(location)[1])
+
+            else:
+                return (False, 'Move function only for a root or folder location of personal or public')
+
+            # If the file or folder in the destination location
+            if self.name in location_obj.content_dict.values():
+                return (False, f'Path \'{concatpath(location_obj.path, self.name)}\' already exists')
 
             # Move the file or folder to the location
             shutil.move(self.fullpath, concatpath(location_obj.fullpath, self.name))

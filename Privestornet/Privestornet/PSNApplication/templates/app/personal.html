@@ -50,7 +50,7 @@
                         </span>
                         <span class="filename" filename="{{ dt['name'] }}">{{ dt['name'] }}</span>
                     </a>
-                    <button onclick="show_fileinfo_menu(this)" filetype="{{ dt['pathtype'] }}" filepath="{{ dt['path'] }}" class="show-fileinfo-menu-btn rounded-2xl p-1 px-2 mx-1 duration-300 hover:bg-[color:var(--theme-color-hover-highlight)]">
+                    <button onclick="show_fileinfo_menu(this)" filename="{{ dt['name'] }}" filetype="{{ dt['pathtype'] }}" filepath="{{ dt['path'] }}" class="show-fileinfo-menu-btn rounded-2xl p-1 px-2 mx-1 duration-300 hover:bg-[color:var(--theme-color-hover-highlight)]">
                         <img class="inline-block w-auto h-4 img-more">
                     </button>
                 </div>
@@ -116,6 +116,24 @@
             <img class="w-auto h-5 inline-block img-properties align-middle">
             <span class="ml-2 align-middle max-sm:hidden">Properties</span>
         </button>
+    </div>
+
+    <div class="absolute invisible p-1 file-rename rounded-tl-[20px] rounded-bl-[20px] backdrop-blur-sm flex flex-col gap-y-[10px] bg-[color:var(--theme-color-medium)] shadow-sm">
+        <h3 class="p-2 text-[18px] font-semibold">Rename</h3>
+        <form class="flex gap-x-[6px] max-sm:w-[200px]" method="post">
+            <input type="text" class="p-1 px-2 max-sm:w-[120px] bg-[color:var(--theme-color-medium)] outline-none focus:border-4 focus:border-[color:var(--theme-color-hover-highlight)] rounded-full duration-200" placeholder="New Name" name="new-name">
+            <input type="submit" class="p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] hover:cursor-pointer rounded-full duration-200" value="Change">
+        </form>
+    </div>
+
+    <div class="absolute hidden bottom-6 right-20 p-2 file-move rounded-[20px] backdrop-blur-sm flex-col gap-y-[10px] bg-[color:var(--theme-color-medium)] shadow-sm animate-[expand_0.3s]">
+        <h3 class="p-2 text-[18px] font-semibold">Move To</h3>
+        <h5 class="move-target"></h5>
+        <h5 class="move-dst"></h5>
+        <div class="flex gap-x-[6px]">
+            <button class="move-change p-1 px-2 grow hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-200">Change</button>
+            <button class="move-cancel p-1 px-2 grow hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-200">Cancel</button>
+        </div>
     </div>
 
     <style>
@@ -248,8 +266,17 @@
                 is_fileinfo_menu_btns_clicked.push(e.contains(event.target));
             })
 
-            if (!is_fileinfo_menu_btns_clicked.some((e) => { return e == true; })) {
+            if (!is_fileinfo_menu_btns_clicked.some((e) => { return e; })) {
                 document.querySelector('.file-info-menu').style.animation = 'shrink 0.5s forwards';
+            }
+
+            let is_file_rename_elements_clicked = Array()
+            document.querySelectorAll('.file-rename input').forEach((e) => {
+                is_file_rename_elements_clicked.push(e.contains(event.target));
+            })
+
+            if (!(is_file_rename_elements_clicked.some((e) => { return e; }) || document.querySelector('.file-rename').contains(event.target) || document.querySelector('.file-info-menu button.rename').contains(event.target))) {
+                document.querySelector('.file-rename').style.animation = 'shrink 0.5s forwards';
             }
         });
 
@@ -298,6 +325,7 @@
 
         // Show the file info menu
         document.querySelector('.file-info-menu').style.visibility = 'hidden';
+        document.querySelector('.file-rename').style.visibility = 'hidden';
         const show_fileinfo_menu = (e) => {
             let rect = e.getBoundingClientRect();
 
@@ -313,21 +341,81 @@
                 document.querySelector('.file-info-menu').style.top = String(parseInt(rect.top) + 15) + 'px';
             }
 
-            document.querySelector('.file-info-menu').style.transitionDuration = '0.2s';
             document.querySelector('.file-info-menu').style.animation = 'expand 0.5s forwards';
             document.querySelector('.file-info-menu').style.visibility = 'visible';
 
             document.querySelector('.file-info-menu button.view').onclick = () => {
-                redirect('./login?page=personal&path=' + e.getAttribute('filepath'))
+                redirect('./login?page=personal&path=' + e.getAttribute('filepath'));
             };
 
             document.querySelector('.file-info-menu button.download').onclick = () => {
-                redirect('./login?page=personal&path=' + e.getAttribute('filepath') + '&download=1')
+                redirect('./login?page=personal&path=' + e.getAttribute('filepath') + '&download=1');
             };
 
             document.querySelector('.file-info-menu button.delete').onclick = () => {
-                redirect('./delete?target=personal&path=' + e.getAttribute('filepath'))
+                redirect('./delete?target=personal&path=' + e.getAttribute('filepath'));
             };
+
+            document.querySelector('.file-info-menu button.move').onclick = () => {
+                // Add move parameter
+                redirect('./login?page=personal&path={{ "/".join(path) }}' + '&move=' + e.getAttribute('filepath'));
+            }
+
+            document.querySelector('.file-info-menu button.rename').onclick = () => {
+                document.querySelector('.file-rename').style.right = String(document.body.offsetWidth - rect.right + 40) + 'px';
+
+                if (rect.top + 15 + document.querySelector('.file-rename').offsetHeight > document.body.offsetHeight) {
+                    document.querySelector('.file-rename').style.borderBottomRightRadius = '0px';
+                    document.querySelector('.file-rename').style.borderTopRightRadius = '20px';
+                    document.querySelector('.file-rename').style.top = String(parseInt(rect.bottom - document.querySelector('.file-rename').scrollHeight) - 13) + 'px';
+                } else {
+                    document.querySelector('.file-rename').style.borderBottomRightRadius = '20px';
+                    document.querySelector('.file-rename').style.borderTopRightRadius = '0px';
+                    document.querySelector('.file-rename').style.top = String(parseInt(rect.top) + 15) + 'px';
+                }
+
+                document.querySelector('.file-rename').style.visibility = 'visible';
+                document.querySelector('.file-rename').style.animation = 'expand 0.2s forwards';
+                document.querySelector('.file-rename input[type="text"]').value = e.getAttribute('filename');
+                document.querySelector('.file-rename input').style.transitionDuration = '0.2s';
+                document.querySelector('.file-rename > form').action = `./rename?target=personal&path=${e.getAttribute('filepath')}`
+            }
+        }
+
+        // Get url parameters
+        let url_params = new URLSearchParams(window.location.search);
+        const move = url_params.get('move');
+
+        // Set file move
+        document.querySelector('.file-move').style.display = 'none';
+        if (move) {
+            document.querySelector('.file-move').style.display = 'flex';
+            document.querySelector('.file-move > .move-target').innerHTML = 'Target: Personal:/' + move;
+            document.querySelector('.file-move > .move-dst').innerHTML = 'Destination: Personal:/{{ "/".join(path) }}';
+
+            if ('{{ "/".join(path) }}'.includes(move)) {
+                document.querySelector('.file-move > .move-target').style.color = 'red';
+                document.querySelector('.file-move > .move-dst').style.color = 'red';
+                document.querySelector('.file-move > div > .move-change').disabled = true;
+                document.querySelector('.file-move > div > .move-change').style.color = 'var(--theme-color-content)';
+                document.querySelector('.file-move > div > .move-change').classList.remove('hover:bg-[color:var(--theme-color-hover-highlight)]');
+            } else {
+                document.querySelector('.file-move > div > .move-change').onclick = () => {
+                    document.querySelector('.file-move').style.animation = 'shrink 0.3s forwards';
+                    setTimeout(() => {
+                        document.querySelector('.file-move').style.display = 'none';
+                        redirect(`./move?target=personal&path=${move}&dst={{ "/".join(path) }}`);
+                    }, 100)
+                }
+            }
+
+            document.querySelector('.file-move > div > .move-cancel').onclick = () => {
+                document.querySelector('.file-move').style.animation = 'shrink 0.3s forwards';
+                setTimeout(() => {
+                    document.querySelector('.file-move').style.display = 'none';
+                    redirect('./login?page=personal&path={{ "/".join(path) }}&move=null');
+                }, 100)
+            }
         }
     </script>
 {% endblock %}
