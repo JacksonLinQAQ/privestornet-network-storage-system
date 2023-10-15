@@ -29,7 +29,7 @@ class SystemConfig:
             self.system_config = {
                 "system-name": "My Privestornet",
                 "system-id": None,
-                "system-version": "DEV2309",
+                "system-version": "DEVB23101",
                 "system-setup": False,
                 "system-activation-code": None,
                 "system-activation-status": False
