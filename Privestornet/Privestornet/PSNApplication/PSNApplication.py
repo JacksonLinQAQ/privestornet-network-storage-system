@@ -281,8 +281,13 @@ def upload():
 
                 zipInfo = zip_ref.infolist()
                 for member in zipInfo:
-                    member.filename = member.filename.encode('cp437').decode('gbk')
-                    zip_ref.extract(member, f'{path}/{os.path.splitext(data.filename)[0]}')
+                    try:
+                        member.filename = member.filename.encode('cp437').decode('gbk')
+                    except UnicodeEncodeError:
+                        pass
+                    # zip_ref.extract(member, f'{path}/{os.path.splitext(data.filename)[0]}')
+
+                zip_ref.extractall(path)
 
             # Check if the zip file exists, then delete it
             if os.path.exists(f'{path}/{data.filename}'):
