@@ -13,97 +13,84 @@
                 "path": "",
                 "fullpath": "./Privestornet/PSNUsers/Users/user",
                 "content": {
-                    "16967559187487838233056398201394.jpg": {
+                    "VSCodeUserSetup-x64-1.83.1.exe": {
                         "pathsource": "personal",
                         "pathtype": "file",
                         "username": "user",
-                        "name": "16967559187487838233056398201394.jpg",
-                        "path": "16967559187487838233056398201394.jpg",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/16967559187487838233056398201394.jpg",
-                        "content": null
-                    },
-                    "16967562140378657752933257718745.jpg": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "16967562140378657752933257718745.jpg",
-                        "path": "16967562140378657752933257718745.jpg",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/16967562140378657752933257718745.jpg",
-                        "content": null
-                    },
-                    "16967597692218166717484829870670.jpg": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "16967597692218166717484829870670.jpg",
-                        "path": "16967597692218166717484829870670.jpg",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/16967597692218166717484829870670.jpg",
-                        "content": null
-                    },
-                    "HW04.pdf": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "HW04.pdf",
-                        "path": "HW04.pdf",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/HW04.pdf",
-                        "content": null
-                    },
-                    "HW05.pdf": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "HW05.pdf",
-                        "path": "HW05.pdf",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/HW05.pdf",
-                        "content": null
-                    },
-                    "IMG20220903101926 - \u526f\u672c.jpg": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "IMG20220903101926 - \u526f\u672c.jpg",
-                        "path": "IMG20220903101926 - \u526f\u672c.jpg",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/IMG20220903101926 - \u526f\u672c.jpg",
-                        "content": null
-                    },
-                    "VID20231008180945.mp4": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "VID20231008180945.mp4",
-                        "path": "VID20231008180945.mp4",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/VID20231008180945.mp4",
-                        "content": null
-                    },
-                    "\u5c4f\u5e55\u622a\u56fe 2023-10-01 153537.png": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "\u5c4f\u5e55\u622a\u56fe 2023-10-01 153537.png",
-                        "path": "\u5c4f\u5e55\u622a\u56fe 2023-10-01 153537.png",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/\u5c4f\u5e55\u622a\u56fe 2023-10-01 153537.png",
-                        "content": null
-                    },
-                    "\u8a69\u7d93\u6587\u5b78\u77e5\u8b58.ocr.docx": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "\u8a69\u7d93\u6587\u5b78\u77e5\u8b58.ocr.docx",
-                        "path": "\u8a69\u7d93\u6587\u5b78\u77e5\u8b58.ocr.docx",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/\u8a69\u7d93\u6587\u5b78\u77e5\u8b58.ocr.docx",
-                        "content": null
-                    },
-                    "\u8a69\u7d93\u6587\u5b78\u77e5\u8b58.pdf": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "\u8a69\u7d93\u6587\u5b78\u77e5\u8b58.pdf",
-                        "path": "\u8a69\u7d93\u6587\u5b78\u77e5\u8b58.pdf",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/\u8a69\u7d93\u6587\u5b78\u77e5\u8b58.pdf",
+                        "name": "VSCodeUserSetup-x64-1.83.1.exe",
+                        "path": "VSCodeUserSetup-x64-1.83.1.exe",
+                        "fullpath": "./Privestornet/PSNUsers/Users/user/VSCodeUserSetup-x64-1.83.1.exe",
                         "content": null
                     }
                 }
+            },
+            "public-data": {
+                "pathsource": "public",
+                "pathtype": "root",
+                "username": null,
+                "name": null,
+                "path": "",
+                "fullpath": "./Privestornet/PSNUsers/Public",
+                "content": {
+                    "test": {
+                        "pathsource": "public",
+                        "pathtype": "folder",
+                        "username": null,
+                        "name": "test",
+                        "path": "test",
+                        "fullpath": "./Privestornet/PSNUsers/Public/test",
+                        "content": {
+                            "test.txt": {
+                                "pathsource": "public",
+                                "pathtype": "file",
+                                "username": null,
+                                "name": "test.txt",
+                                "path": "test/test.txt",
+                                "fullpath": "./Privestornet/PSNUsers/Public/test/test.txt",
+                                "content": null
+                            }
+                        }
+                    },
+                    "test2.py": {
+                        "pathsource": "public",
+                        "pathtype": "file",
+                        "username": null,
+                        "name": "test2.py",
+                        "path": "test2.py",
+                        "fullpath": "./Privestornet/PSNUsers/Public/test2.py",
+                        "content": null
+                    }
+                }
+            }
+        },
+        "user2": {
+            "username": "user2",
+            "password": "user",
+            "is-administrator": false,
+            "received-data": [
+                {
+                    "sent-from": "user",
+                    "sent-to": "user2",
+                    "sent-data": {
+                        "pathsource": "personal",
+                        "pathtype": "file",
+                        "username": "user",
+                        "name": "VSCodeUserSetup-x64-1.83.1.exe",
+                        "path": "VSCodeUserSetup-x64-1.83.1.exe",
+                        "fullpath": "./Privestornet/PSNUsers/Users/user/VSCodeUserSetup-x64-1.83.1.exe",
+                        "content": null
+                    },
+                    "sent-date": "2023-10-29 10:14:47"
+                }
+            ],
+            "personal-data": {
+                "pathsource": "personal",
+                "pathtype": "root",
+                "username": "user2",
+                "name": null,
+                "path": "",
+                "fullpath": "./Privestornet/PSNUsers/Users/user2",
+                "content": {}
             },
             "public-data": {
                 "pathsource": "public",

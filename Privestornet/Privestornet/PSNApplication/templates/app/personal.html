@@ -142,6 +142,15 @@
         </div>
     </div>
 
+    <div class="absolute hidden bottom-6 right-20 p-2 file-share rounded-[20px] backdrop-blur-sm flex-col gap-y-[10px] bg-[color:var(--theme-color-medium)] shadow-sm animate-[expand_0.3s]">
+        <h3 class="p-2 text-[18px] font-semibold">Share To</h3>
+        <h5 class="share-target"></h5>
+        <div class="flex gap-x-[6px]">
+            <button class="share-send p-1 px-2 grow hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-200">Send</button>
+            <button class="share-cancel p-1 px-2 grow hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-200">Cancel</button>
+        </div>
+    </div>
+
     <style>
         .popup {
             width: 30%;
@@ -423,5 +432,8 @@
                 }, 100)
             }
         }
+
+        // Set file share
+        
     </script>
 {% endblock %}

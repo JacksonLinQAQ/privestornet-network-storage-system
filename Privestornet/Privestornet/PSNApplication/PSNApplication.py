@@ -419,3 +419,74 @@ def move():
     else:
         PSN_SYS.error(request.remote_addr, result[1])
         return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error={result[1]}')
+
+@PSN_APP.route('/share')
+def share():
+    PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
+    if not PSN_SYS.find_user(request.remote_addr).is_login():
+        return redirect(f'./login?page={request.args.get("target")}&error=Please%20login%20first')
+
+    # Get required parameters
+    path = request.args.get('path')
+    target = request.args.get('target')
+    to_user = request.args.get('to-user')
+
+    # If the parameters provided are incomplete
+    if not (path and target and to_user):
+        PSN_SYS.error(request.remote_addr, 'Invaild parameters')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20parameters')
+
+    # Check and find the data
+    if target == 'personal':
+        data = PSN_SYS.find_user(request.remote_addr).user.personal_data.quickfind(path)
+    elif target == 'public':
+        data = PSN_SYS.find_user(request.remote_addr).user.public_data.quickfind(path)
+    else:
+        PSN_SYS.error(request.remote_addr, f'Invaild target \'{target}\'')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20target%20\'{target}\'')
+
+    # If the data not exists
+    if not data:
+        PSN_SYS.error(request.remote_addr, f'Invaild path \'{path}\'')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20path%20\'{path}\'')
+
+    # If the user not exists
+    if not PSN_SYS.users.find_user(to_user):
+        PSN_SYS.error(request.remote_addr, f'User \'{to_user}\' does not exist')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=User%20\'{to_user}\'%20does%20not%20exist')
+
+    # Otherwise, send the data to the user and return the result
+    result = PSN_SYS.find_user(request.remote_addr).user.share_data(to_user, data)
+    if result[0]:
+        PSN_SYS.log(request.remote_addr, f'Share \'{data.path}\' to user \'{to_user}\' successfully')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&msg=Share%20\'{data.path}\'%20to%20user%20\'{to_user}\'%20successfully')
+    else:
+        PSN_SYS.error(request.remote_addr, result[1])
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error={result[1]}')
+
+@PSN_APP.route('/accept')
+def accept():
+    PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
+    if not PSN_SYS.find_user(request.remote_addr).is_login():
+        return redirect(f'./login?page={request.args.get("from-user")}&error=Please%20login%20first')
+
+    # Get required parameters
+    path = request.args.get('path')
+    data = request.args.get('data')
+
+    # If the parameters provided are incomplete
+    if not (path != None and data):
+        PSN_SYS.error(request.remote_addr, 'Invaild parameters')
+        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20parameters')
+
+    # Check and find the data
+    data = [ shared_file.sent_data for shared_file in PSN_SYS.find_user(request.remote_addr).user.received_data if shared_file.sent_data.name == data ]
+    if data:
+        data = data[0]
+    else:
+        pass
+
+    # Check the save path
+    path = PSN_SYS.find_user(request.remote_addr).user.personal_data.quickfind(path)
+    if not (path and (path.pathtype == 'folder' or path.pathtype == 'root')):
+        pass
