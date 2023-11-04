@@ -279,15 +279,12 @@ def upload():
             with zipfile.ZipFile(f'{path}/{data.filename}', 'r') as zip_ref:
                 os.makedirs(f'{path}/{os.path.splitext(data.filename)[0]}')
 
-                zipInfo = zip_ref.infolist()
-                for member in zipInfo:
+                for member in zip_ref.filelist:
                     try:
                         member.filename = member.filename.encode('cp437').decode('gbk')
                     except UnicodeEncodeError:
-                        pass
-                    # zip_ref.extract(member, f'{path}/{os.path.splitext(data.filename)[0]}')
-
-                zip_ref.extractall(path)
+                        PSN_SYS.error('Encode or decode file name error occured')
+                    zip_ref.extract(member, f'{path}/{os.path.splitext(data.filename)[0]}')
 
             # Check if the zip file exists, then delete it
             if os.path.exists(f'{path}/{data.filename}'):
