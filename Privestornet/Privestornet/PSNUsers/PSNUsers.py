@@ -541,7 +541,7 @@ class Users:
                                 data['sent-data']['name']
                             ),
                             data['sent-date']
-                        ) for data in user['received-data']
+                        ) for data in user['received-data'] if os.path.exists(data['sent-data']['fullpath'])
                     ]
                 ))
 

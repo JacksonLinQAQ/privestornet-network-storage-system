@@ -104,6 +104,10 @@ class AccessedUser:
         '''
         if self.is_login():
             self.user = self.users.find_user(self.user.username)
+            for data in self.user.received_data:
+                if not os.path.exists(data.sent_data.fullpath):
+                    self.user.received_data.remove(data)
+            self.users.save_users()
 
     def to_dict(self):
         '''

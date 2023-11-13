@@ -12,17 +12,7 @@
                 "name": null,
                 "path": "",
                 "fullpath": "./Privestornet/PSNUsers/Users/user",
-                "content": {
-                    "VSCodeUserSetup-x64-1.83.1.exe": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "VSCodeUserSetup-x64-1.83.1.exe",
-                        "path": "VSCodeUserSetup-x64-1.83.1.exe",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/VSCodeUserSetup-x64-1.83.1.exe",
-                        "content": null
-                    }
-                }
+                "content": {}
             },
             "public-data": {
                 "pathsource": "public",
@@ -67,22 +57,7 @@
             "username": "user2",
             "password": "user",
             "is-administrator": false,
-            "received-data": [
-                {
-                    "sent-from": "user",
-                    "sent-to": "user2",
-                    "sent-data": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "VSCodeUserSetup-x64-1.83.1.exe",
-                        "path": "VSCodeUserSetup-x64-1.83.1.exe",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/VSCodeUserSetup-x64-1.83.1.exe",
-                        "content": null
-                    },
-                    "sent-date": "2023-10-29 10:14:47"
-                }
-            ],
+            "received-data": [],
             "personal-data": {
                 "pathsource": "personal",
                 "pathtype": "root",

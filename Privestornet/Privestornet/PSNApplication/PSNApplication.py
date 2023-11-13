@@ -417,7 +417,7 @@ def move():
         PSN_SYS.error(request.remote_addr, result[1])
         return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error={result[1]}')
 
-@PSN_APP.route('/share')
+@PSN_APP.route('/share', methods=['POST'])
 def share():
     PSN_SYS.access(request.remote_addr, request.path, dict(request.args))
     if not PSN_SYS.find_user(request.remote_addr).is_login():
@@ -425,41 +425,39 @@ def share():
 
     # Get required parameters
     path = request.args.get('path')
-    target = request.args.get('target')
-    to_user = request.args.get('to-user')
+    share_to = request.form['share-to']
 
     # If the parameters provided are incomplete
-    if not (path and target and to_user):
+    if not (path and share_to):
         PSN_SYS.error(request.remote_addr, 'Invaild parameters')
-        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20parameters')
+        return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20parameters')
 
     # Check and find the data
-    if target == 'personal':
-        data = PSN_SYS.find_user(request.remote_addr).user.personal_data.quickfind(path)
-    elif target == 'public':
-        data = PSN_SYS.find_user(request.remote_addr).user.public_data.quickfind(path)
-    else:
-        PSN_SYS.error(request.remote_addr, f'Invaild target \'{target}\'')
-        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20target%20\'{target}\'')
+    data = PSN_SYS.find_user(request.remote_addr).user.personal_data.quickfind(path)
 
     # If the data not exists
     if not data:
         PSN_SYS.error(request.remote_addr, f'Invaild path \'{path}\'')
-        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20path%20\'{path}\'')
+        return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20path%20\'{path}\'')
+
+    # Check that the file or folder was sent by and shared with this user
+    if data.username == share_to:
+        PSN_SYS.error(request.remote_addr, f'Cannot share with yourself')
+        return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Cannot%20share%20with%20yourself')
 
     # If the user not exists
-    if not PSN_SYS.users.find_user(to_user):
-        PSN_SYS.error(request.remote_addr, f'User \'{to_user}\' does not exist')
-        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=User%20\'{to_user}\'%20does%20not%20exist')
+    if not PSN_SYS.users.find_user(share_to):
+        PSN_SYS.error(request.remote_addr, f'User \'{share_to}\' does not exist')
+        return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&error=User%20\'{share_to}\'%20does%20not%20exist')
 
     # Otherwise, send the data to the user and return the result
-    result = PSN_SYS.find_user(request.remote_addr).user.share_data(to_user, data)
+    result = PSN_SYS.find_user(request.remote_addr).user.share_data(share_to, data)
     if result[0]:
-        PSN_SYS.log(request.remote_addr, f'Share \'{data.path}\' to user \'{to_user}\' successfully')
-        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&msg=Share%20\'{data.path}\'%20to%20user%20\'{to_user}\'%20successfully')
+        PSN_SYS.log(request.remote_addr, f'User \'{PSN_SYS.find_user(request.remote_addr).user.username}\' shared \'{data.path}\' to user \'{share_to}\' successfully')
+        return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&msg=Shared%20\'{data.path}\'%20to%20user%20\'{share_to}\'%20successfully')
     else:
         PSN_SYS.error(request.remote_addr, result[1])
-        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error={result[1]}')
+        return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&error={result[1]}')
 
 @PSN_APP.route('/accept')
 def accept():
@@ -474,16 +472,27 @@ def accept():
     # If the parameters provided are incomplete
     if not (path != None and data):
         PSN_SYS.error(request.remote_addr, 'Invaild parameters')
-        return redirect(f'./login?page={request.args.get("target")}&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20parameters')
+        return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invaild%20parameters')
 
     # Check and find the data
-    data = [ shared_file.sent_data for shared_file in PSN_SYS.find_user(request.remote_addr).user.received_data if shared_file.sent_data.name == data ]
+    data = [ shared_file for shared_file in PSN_SYS.find_user(request.remote_addr).user.received_data if shared_file.sent_data.name == data ]
     if data:
         data = data[0]
     else:
-        pass
+        PSN_SYS.error(request.remote_addr, 'Shared file or folder not found')
+        return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Shared%20file%20or%20folder%20not%20found')
 
     # Check the save path
     path = PSN_SYS.find_user(request.remote_addr).user.personal_data.quickfind(path)
     if not (path and (path.pathtype == 'folder' or path.pathtype == 'root')):
-        pass
+        PSN_SYS.error(request.remote_addr, 'Invalid save path')
+        return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&error=Invalid%20save%20path')
+
+    # Accept the shared file or folder
+    result = data.accept(path)
+    if result[0]:
+        PSN_SYS.log(request.remote_addr, f'User \'{PSN_SYS.find_user(request.remote_addr).user.username}\' received \'{data.sent_data.path}\' from \'{data.sent_from}\' successfully')
+        return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&msg=Received%20\'{data.sent_data.path}\'%20from%20\'{data.sent_from}\'%20successfully')
+    else:
+        PSN_SYS.error(request.remote_addr, result[1])
+        return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&error={result[1]}')
