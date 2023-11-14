@@ -427,7 +427,7 @@ class User:
             # Check if the user is exists
             if user.username == self.username:
                 # Check if the user data are match
-                if user.password == self.password and user.is_administrator == self.is_administrator and user.received_data == self.received_data:
+                if user.password == self.password and user.is_administrator == self.is_administrator:
                     self.personal_data = PersonalRoot(self.username)
                     self.public_data = PublicRoot()
                     return (True, 'OK')

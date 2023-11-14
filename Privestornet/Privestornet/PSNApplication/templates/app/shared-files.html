@@ -1,0 +1,43 @@
+{% extends 'root/app.html' %}
+
+{% block title %}Privestornet{% endblock %}
+
+{% block app %}
+    <h1 class="font-bold text-[24px] mb-8">Shared Files</h1>
+    <div class="flex flex-col gap-y-[10px] flex-wrap">
+        <div class="files-display flex flex-col p-1 h-fit bg-[color:var(--theme-color-light)] rounded-[20px] shadow-sm max-w-full">
+            {% for dt in data %}
+                <div class="flex justify-between m-1 max-w-full">
+                    <span class="py-1 px-2 max-w-[60%] hover:bg-[color:var(--theme-color-hover-highlight)] text-ellipsis rounded-2xl duration-300 overflow-x-hidden whitespace-nowrap">
+                        <span class="mr-2 align-middle">
+                            {% if dt.sent_data.pathtype == 'folder' %}
+                                <img class="inline-block w-auto h-5 img-folder align-middle">
+                            {% else %}
+                                <img class="inline-block w-auto h-5 img-file align-middle">
+                            {% endif %}
+                        </span>
+                        <span class="filename align-middle w-[90%]" filename="{{ dt['name'] }}">{{ dt.sent_data.name }}</span>
+                    </span>
+                    <span class="align-middle m-1">
+                        <img class="inline-block align-middle img-user" width="20px" height="20px">
+                        <span class="ml-2">{{ dt.sent_from }}</span>
+                    </span>
+                    <a href="./login?page=personal&path=&receive={{ dt.sent_data.name }}" class="p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+                        <span class="align-middle">Accept</span>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block popup_content %}
+{% endblock %}
+
+{% block app_extra %}
+    <style>
+        .popup {
+            display: none;
+        }
+    </style>
+{% endblock %}

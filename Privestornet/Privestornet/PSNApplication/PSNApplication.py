@@ -19,6 +19,23 @@ PSN_SYS = PSNSystem.System()
 def favicon():
     return send_file('./favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@PSN_APP.route('/ficon')
+def ficon():
+    user = request.args.get('user')
+    target = request.args.get('target')
+    path = request.args.get('path')
+
+    if [request.remote_addr == accessed_user.ip for accessed_user in PSN_SYS.accessed_users]:
+        if '.png' in path or '.jpg' in path or '.jpeg' in path:
+            if target == 'personal':
+                icon = PSN_SYS.find_user(username=user).user.personal_data.quickfind(path)
+            elif target == 'public':
+                icon = PSN_SYS.find_user(username=user).user.public_data.quickfind(path)
+            if icon:
+                return send_file(os.path.abspath(icon.fullpath))
+        return 'Unsupported file type'
+    return 'Please login first'
+
 @PSN_APP.route('/')
 @PSN_APP.route('/index')
 def index():
@@ -66,11 +83,13 @@ def login():
         else:
             try:
                 # If the page is not personal or public storage
-                if not (page == 'personal' or page == 'public'):
-                    path = None
-                    path_iter = None
-                    data = None
-                    return render_template(f'app/{page}.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, path=path, path_iter=path_iter, data=data)
+                if not (page == 'personal' or page == 'public' or page == 'shared-files'):
+                    return render_template(f'app/{page}.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page)
+
+                if page == 'shared-files':
+                    PSN_SYS.refresh()
+                    data = PSN_SYS.find_user(request.remote_addr).user.received_data
+                    return render_template(f'app/{page}.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, data=data)
 
                 # If the page is personal or public storage
                 # Then check the path
@@ -95,23 +114,23 @@ def login():
 
                 # If the data not exists
                 if not data:
-                    return render_template(f'error/file-not-found.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, path=path, path_iter=path_iter, data=data), 404
+                    return render_template(f'error/file-not-found.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page), 404
 
-                # Check move parameters
-                if request.args.get('move') == 'null':
+                # Check move and receive parameters
+                if request.args.get('move') == 'null' or request.args.get('receive') == 'null':
                     return redirect(f'./login?page={page}&path={path}')
 
                 if user.accessed_page[-2][1].get('move') and user.accessed_page[-2][1]['move'] != 'null' and not request.args.get('move'):
                     return redirect(f'./login?page={page}&path={path}&move={user.accessed_page[-2][1]["move"]}')
 
+                if user.accessed_page[-2][1].get('receive') and user.accessed_page[-2][1]['receive'] != 'null' and not request.args.get('receive'):
+                    return redirect(f'./login?page={page}&path={path}&receive={user.accessed_page[-2][1]["receive"]}')
+
                 # If the data exists
                 # Then check the path type and return it
 
                 if not (data.pathtype == 'root' or data.pathtype == 'folder' or data.pathtype == 'file'):
-                    path = None
-                    path_iter = None
-                    data = None
-                    return render_template(f'error/file-not-found.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, path=path, path_iter=path_iter, data=data), 404
+                    return render_template(f'error/file-not-found.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page), 404
 
                 if data.pathtype == 'file':
                     # If the user needs to download the data
@@ -134,7 +153,7 @@ def login():
 
                 # The data has been checked as a folder
                 # Return all data of the folder path
-                return render_template(f'app/{page}.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, path=path, path_iter=path_iter, data=data)
+                return render_template(f'app/{page}.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, data=data, path=path, path_iter=path_iter)
             except TemplateNotFound:
                 return redirect('./login?page=home')
 
@@ -453,6 +472,7 @@ def share():
     # Otherwise, send the data to the user and return the result
     result = PSN_SYS.find_user(request.remote_addr).user.share_data(share_to, data)
     if result[0]:
+        PSN_SYS.users.load_users()
         PSN_SYS.log(request.remote_addr, f'User \'{PSN_SYS.find_user(request.remote_addr).user.username}\' shared \'{data.path}\' to user \'{share_to}\' successfully')
         return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&msg=Shared%20\'{data.path}\'%20to%20user%20\'{share_to}\'%20successfully')
     else:
@@ -491,6 +511,7 @@ def accept():
     # Accept the shared file or folder
     result = data.accept(path)
     if result[0]:
+        PSN_SYS.users.load_users()
         PSN_SYS.log(request.remote_addr, f'User \'{PSN_SYS.find_user(request.remote_addr).user.username}\' received \'{data.sent_data.path}\' from \'{data.sent_from}\' successfully')
         return redirect(f'./login?page=personal&path={"/".join(request.args.get("path").split("/")[:-1])}&msg=Received%20\'{data.sent_data.path}\'%20from%20\'{data.sent_from}\'%20successfully')
     else:

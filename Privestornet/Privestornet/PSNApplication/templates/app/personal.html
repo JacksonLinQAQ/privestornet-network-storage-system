@@ -41,20 +41,20 @@
                 {% endfor %}
             </h2>
         </div>
-        <div class="files-display flex flex-col p-1 h-fit bg-[color:var(--theme-color-light)] rounded-[20px] shadow-sm">
+        <div class="files-display flex flex-col p-1 h-fit bg-[color:var(--theme-color-light)] rounded-[20px] shadow-sm max-w-full">
             {% for dt in data.to_dict()['content'].values() %}
-                <div class="flex justify-between m-1">
-                    <a class="py-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-2xl duration-300" href="./login?page={{ page }}&path={{ dt['path'] }}">
+                <div class="flex justify-between m-1 max-w-full">
+                    <a class="py-1 px-2 max-w-[80%] hover:bg-[color:var(--theme-color-hover-highlight)] text-ellipsis rounded-2xl duration-300 overflow-x-hidden whitespace-nowrap" href="./login?page={{ page }}&path={{ dt['path'] }}">
                         <span class="mr-2 align-middle">
                             {% if dt['pathtype'] == 'folder' %}
                                 <img class="inline-block w-auto h-5 img-folder align-middle">
                             {% elif '.jpg' in dt['name'] or '.png' in dt['name'] %}
-                                <img class="inline-block w-5 h-5 object-cover align-middle" src="./login?page={{ page }}&path={{ dt['path'] }}">
+                                <img class="inline-block w-5 h-5 object-cover align-middle" src="./ficon?user={{ dt['username'] }}&target=personal&path={{ dt['path'] }}">
                             {% else %}
                                 <img class="inline-block w-auto h-5 img-file align-middle">
                             {% endif %}
                         </span>
-                        <span class="filename align-middle" filename="{{ dt['name'] }}">{{ dt['name'] }}</span>
+                        <span class="filename align-middle w-[90%]" filename="{{ dt['name'] }}">{{ dt['name'] }}</span>
                     </a>
                     <button onclick="show_fileinfo_menu(this)" filename="{{ dt['name'] }}" filetype="{{ dt['pathtype'] }}" filepath="{{ dt['path'] }}" class="show-fileinfo-menu-btn rounded-2xl p-1 px-2 mx-1 duration-300 hover:bg-[color:var(--theme-color-hover-highlight)]">
                         <img class="inline-block w-auto h-4 img-more">
@@ -81,11 +81,11 @@
         <div class="upload-options flex flex-col bg-[color:var(--theme-color-medium)] p-1 gap-y-[5px] rounded-[20px] shadow-sm backdrop-blur-sm">
             <button class="upload-file-btn hover:bg-[color:var(--theme-color-hover-highlight)] hover:cursor-pointer py-2 px-4 rounded-[20px] duration-300">
                 <img class="w-auto h-4 inline-block img-upload-file">
-                <span class="ml-2 max-sm:hidden">Upload Files</span>
+                <span class="ml-2">Upload Files</span>
             </button>
             <button class="upload-folder-btn hover:bg-[color:var(--theme-color-hover-highlight)] hover:cursor-pointer py-2 px-4 rounded-[20px] duration-300">
                 <img class="w-auto h-4 inline-block img-upload-folder">
-                <span class="ml-2 max-sm:hidden">Upload Folders</span>
+                <span class="ml-2">Upload Folders</span>
             </button>
         </div>
         <div class="upload-btn bg-[color:var(--theme-color-medium)] p-2 rounded-full hover:bg-[color:var(--theme-color-hover-highlight)] hover:cursor-pointer w-fit shadow-sm duration-300">
@@ -96,31 +96,31 @@
     <div class="absolute invisible p-1 file-info-menu rounded-tl-[20px] rounded-bl-[20px] backdrop-blur-sm duration-300 flex flex-col gap-y-[10px] bg-[color:var(--theme-color-medium)] shadow-sm">
         <button class="view p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
             <img class="w-auto h-5 inline-block img-view align-middle">
-            <span class="ml-2 align-middle max-sm:hidden">View</span>
+            <span class="ml-2 align-middle">View</span>
         </button>
         <button class="download p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
             <img class="w-auto h-5 inline-block img-download align-middle">
-            <span class="ml-2 align-middle max-sm:hidden">Download</span>
+            <span class="ml-2 align-middle">Download</span>
         </button>
         <button class="delete p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
             <img class="w-auto h-5 inline-block img-delete align-middle">
-            <span class="ml-2 align-middle max-sm:hidden">Delete</span>
+            <span class="ml-2 align-middle">Delete</span>
         </button>
         <button class="rename p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
             <img class="w-auto h-5 inline-block img-rename align-middle">
-            <span class="ml-2 align-middle max-sm:hidden">Rename</span>
+            <span class="ml-2 align-middle">Rename</span>
         </button>
         <button class="move p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
             <img class="w-auto h-5 inline-block img-move align-middle">
-            <span class="ml-2 align-middle max-sm:hidden">Move</span>
+            <span class="ml-2 align-middle">Move</span>
         </button>
         <button class="share p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
             <img class="w-auto h-5 inline-block img-share align-middle">
-            <span class="ml-2 align-middle max-sm:hidden">Share</span>
+            <span class="ml-2 align-middle">Share</span>
         </button>
         <button class="properties p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
             <img class="w-auto h-5 inline-block img-properties align-middle">
-            <span class="ml-2 align-middle max-sm:hidden">Properties</span>
+            <span class="ml-2 align-middle">Properties</span>
         </button>
     </div>
 
@@ -139,6 +139,16 @@
         <div class="flex gap-x-[6px]">
             <button class="move-change p-1 px-2 grow hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-200">Change</button>
             <button class="move-cancel p-1 px-2 grow hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-200">Cancel</button>
+        </div>
+    </div>
+
+    <div class="absolute hidden bottom-6 right-20 p-2 file-receive rounded-[20px] backdrop-blur-sm flex-col gap-y-[10px] bg-[color:var(--theme-color-medium)] shadow-sm animate-[expand_0.3s]">
+        <h3 class="p-2 text-[18px] font-semibold">Accept</h3>
+        <h5 class="receive-target"></h5>
+        <h5 class="receive-dst"></h5>
+        <div class="flex gap-x-[6px]">
+            <button class="receive-change p-1 px-2 grow hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-200">Accept</button>
+            <button class="receive-cancel p-1 px-2 grow hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-200">Cancel</button>
         </div>
     </div>
 
@@ -315,32 +325,6 @@
             document.querySelector('.upload-data-form input[type="submit"]').click();
         })
 
-        // Limit the filename display length
-        let displayWidth_change = 0;
-        const check_filename_display = () => {
-            let displayWidth = document.querySelector('.files-display').offsetWidth;
-            console.log(displayWidth);
-            let maxLength = parseInt((displayWidth - 350) / 2.3);
-            const filenames = document.querySelectorAll('.filename');
-
-            if (Math.abs(displayWidth_change - displayWidth) < 250) {
-                return;
-            } else {
-                displayWidth_change = displayWidth;
-            }
-
-            filenames.forEach((f) => {
-                if (f.innerText.length > maxLength) {
-                    f.innerHTML = f.getAttribute('filename').substring(0, maxLength) + '...';
-                } else {
-                    f.innerHTML = f.getAttribute('filename');
-                }
-            })
-        }
-
-        check_filename_display();
-        window.addEventListener('resize', check_filename_display);
-
         // Show the file info menu
         document.querySelector('.file-info-menu').style.visibility = 'hidden';
         document.querySelector('.file-rename').style.visibility = 'hidden';
@@ -410,6 +394,7 @@
         // Get url parameters
         let url_params = new URLSearchParams(window.location.search);
         const move = url_params.get('move');
+        const receive = url_params.get('receive');
         const share = url_params.get('share');
         const target = url_params.get('target');
 
@@ -441,6 +426,31 @@
                 setTimeout(() => {
                     document.querySelector('.file-move').style.display = 'none';
                     redirect('./login?page=personal&path={{ "/".join(path) }}&move=null');
+                }, 100)
+            }
+        }
+
+        // Set file receive
+        document.querySelector('.file-receive').style.display = 'none';
+        if (receive) {
+            document.querySelector('.file-receive').style.display = 'flex';
+            document.querySelector('.file-receive > .receive-target').innerHTML = 'Target: ' + receive;
+            document.querySelector('.file-receive > .receive-dst').innerHTML = 'Destination: Personal:/{{ "/".join(path) }}';
+
+
+            document.querySelector('.file-receive > div > .receive-change').onclick = () => {
+                document.querySelector('.file-receive').style.animation = 'shrink 0.3s forwards';
+                setTimeout(() => {
+                    document.querySelector('.file-receive').style.display = 'none';
+                    redirect(`./accept?data=${receive}&path={{ "/".join(path) }}`);
+                }, 100)
+            }
+
+            document.querySelector('.file-receive > div > .receive-cancel').onclick = () => {
+                document.querySelector('.file-receive').style.animation = 'shrink 0.3s forwards';
+                setTimeout(() => {
+                    document.querySelector('.file-receive').style.display = 'none';
+                    redirect('./login?page=personal&path={{ "/".join(path) }}&receive=null');
                 }, 100)
             }
         }

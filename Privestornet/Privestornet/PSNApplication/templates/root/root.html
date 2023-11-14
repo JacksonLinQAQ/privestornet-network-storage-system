@@ -269,7 +269,7 @@
                     {% if user.is_login() %}
                         <a class="ml-6 p-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./login">
                             <img class="inline-block align-middle img-user" width="20px" height="20px">
-                            <span class="inline-block ml-1 align-middle">{{ user.user.username }}</span>
+                            <span class="inline-block ml-1 align-middle max-sm:hidden">{{ user.user.username }}</span>
                         </a>
                         <a class="ml-6 p-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-lg max-sm:p-1 max-sm:ml-1 duration-300" href="./logout">
                             <img class="inline-block align-middle img-logout" width="20px" height="20px">

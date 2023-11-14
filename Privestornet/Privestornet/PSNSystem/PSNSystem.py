@@ -76,14 +76,14 @@ class AccessedUser:
         '''
             Access a page
         '''
-        self.refresh()
+        self.refresh(self.users)
         self.accessed_page.append((url, params))
 
     def login(self, username: str, password: str):
         '''
             Login to the system
         '''
-        self.refresh()
+        self.refresh(self.users)
         user = self.users.find_user(username)
         if user and user.password == password:
             self.user = user
@@ -95,13 +95,15 @@ class AccessedUser:
         '''
             Logout of the system
         '''
-        self.refresh()
+        self.refresh(self.users)
         self.user = None
 
-    def refresh(self):
+    def refresh(self, users: Users):
         '''
             Refresh the user object
         '''
+        self.users = users
+
         if self.is_login():
             self.user = self.users.find_user(self.user.username)
             for data in self.user.received_data:
@@ -215,7 +217,7 @@ class System:
         '''
         self.users = Users()
         for user in self.accessed_users:
-            user.refresh()
+            user.refresh(self.users)
 
     def log(self, ip: str, msg: str):
         '''
