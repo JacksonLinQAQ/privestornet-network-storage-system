@@ -9,5 +9,5 @@
 - Dev Build 23111 (DEVB23111)
 
 ## Download
-- Still haven't release yet
+- Still haven't released yet
 
