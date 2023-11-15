@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, send_file
 from Privestornet.PSNSystem import PSNSystem
+from Privestornet.PSNPath import PSNPath
 from socket import gethostbyname, gethostname
 from jinja2.exceptions import TemplateNotFound
 import os, zipfile, shutil
@@ -25,14 +26,14 @@ def ficon():
     target = request.args.get('target')
     path = request.args.get('path')
 
-    if [request.remote_addr == accessed_user.ip for accessed_user in PSN_SYS.accessed_users]:
+    if [request.remote_addr == accessed_user.ip and user == accessed_user.user.username for accessed_user in PSN_SYS.accessed_users]:
         if '.png' in path or '.jpg' in path or '.jpeg' in path:
             if target == 'personal':
-                icon = PSN_SYS.find_user(username=user).user.personal_data.quickfind(path)
+                icon = os.path.join(PSNPath.PSNUSERS_USERS_DATA_PATH, user, path)
             elif target == 'public':
-                icon = PSN_SYS.find_user(username=user).user.public_data.quickfind(path)
-            if icon:
-                return send_file(os.path.abspath(icon.fullpath))
+                icon = os.path.join(PSNPath.PSNUSERS_PUBLIC_DATA_PATH, path)
+            if os.path.exists(icon):
+                return send_file(os.path.abspath(icon))
         return 'Unsupported file type'
     return 'Please login first'
 
@@ -301,8 +302,8 @@ def upload():
                 for member in zip_ref.filelist:
                     try:
                         member.filename = member.filename.encode('cp437').decode('gbk')
-                    except UnicodeEncodeError:
-                        PSN_SYS.error('Encode or decode file name error occured')
+                    except (UnicodeEncodeError, UnicodeDecodeError):
+                        PSN_SYS.error(request.remote_addr, 'Encode or decode file name error occured')
                     zip_ref.extract(member, f'{path}/{os.path.splitext(data.filename)[0]}')
 
             # Check if the zip file exists, then delete it

@@ -12,76 +12,7 @@
                 "name": null,
                 "path": "",
                 "fullpath": "./Privestornet/PSNUsers/Users/user",
-                "content": {
-                    "GitHubDesktopSetup-x64.exe": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user",
-                        "name": "GitHubDesktopSetup-x64.exe",
-                        "path": "GitHubDesktopSetup-x64.exe",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/GitHubDesktopSetup-x64.exe",
-                        "content": null
-                    },
-                    "\u65b0\u589e\u8cc7\u6599\u593e": {
-                        "pathsource": "personal",
-                        "pathtype": "folder",
-                        "username": "user",
-                        "name": "\u65b0\u589e\u8cc7\u6599\u593e",
-                        "path": "\u65b0\u589e\u8cc7\u6599\u593e",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e",
-                        "content": {
-                            "\u65b0\u589e\u8cc7\u6599\u593e": {
-                                "pathsource": "personal",
-                                "pathtype": "folder",
-                                "username": "user",
-                                "name": "\u65b0\u589e\u8cc7\u6599\u593e",
-                                "path": "\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
-                                "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
-                                "content": {
-                                    "\u65b0\u589e\u8cc7\u6599\u593e": {
-                                        "pathsource": "personal",
-                                        "pathtype": "folder",
-                                        "username": "user",
-                                        "name": "\u65b0\u589e\u8cc7\u6599\u593e",
-                                        "path": "\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
-                                        "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
-                                        "content": {
-                                            "\u65b0\u589e\u8cc7\u6599\u593e": {
-                                                "pathsource": "personal",
-                                                "pathtype": "folder",
-                                                "username": "user",
-                                                "name": "\u65b0\u589e\u8cc7\u6599\u593e",
-                                                "path": "\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
-                                                "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
-                                                "content": {
-                                                    "\u65b0\u589e\u8cc7\u6599\u593e": {
-                                                        "pathsource": "personal",
-                                                        "pathtype": "folder",
-                                                        "username": "user",
-                                                        "name": "\u65b0\u589e\u8cc7\u6599\u593e",
-                                                        "path": "\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
-                                                        "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
-                                                        "content": {
-                                                            "\u65b0\u589e\u8cc7\u6599\u593e": {
-                                                                "pathsource": "personal",
-                                                                "pathtype": "folder",
-                                                                "username": "user",
-                                                                "name": "\u65b0\u589e\u8cc7\u6599\u593e",
-                                                                "path": "\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
-                                                                "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
-                                                                "content": {}
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                "content": {}
             },
             "public-data": {
                 "pathsource": "public",
@@ -105,17 +36,7 @@
                 "name": null,
                 "path": "",
                 "fullpath": "./Privestornet/PSNUsers/Users/user2",
-                "content": {
-                    "GitHubDesktopSetup-x64.exe": {
-                        "pathsource": "personal",
-                        "pathtype": "file",
-                        "username": "user2",
-                        "name": "GitHubDesktopSetup-x64.exe",
-                        "path": "GitHubDesktopSetup-x64.exe",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user2/GitHubDesktopSetup-x64.exe",
-                        "content": null
-                    }
-                }
+                "content": {}
             },
             "public-data": {
                 "pathsource": "public",
