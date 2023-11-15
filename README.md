@@ -5,7 +5,9 @@
 1) Windows 10 or above
 2) Python 3.11 or above (with modules "flask" and "requests")
 
-## Latest Version: Dev Build 23111 (DEVB23111)
+## Latest Version
+- Dev Build 23111 (DEVB23111)
 
-## Download: Still haven't release yet
+## Download
+- Still haven't release yet
 
