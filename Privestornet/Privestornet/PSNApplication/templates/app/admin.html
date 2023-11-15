@@ -1,0 +1,25 @@
+{% extends 'root/app.html' %}
+
+{% block title %}Privestornet{% endblock %}
+
+{% block app %}
+    <h1 class="font-bold text-[24px] mb-8">Administrator Settings</h1>
+    <div class="flex flex-col gap-y-[10px] flex-wrap">
+        <div class="users-display flex flex-col p-1 h-fit bg-[color:var(--theme-color-light)] rounded-[20px] shadow-sm max-w-full">
+            <h1 class="font-bold text-[18px] m-2">Users</h1>
+            {% for user in users.users %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block popup_content %}
+{% endblock %}
+
+{% block app_extra %}
+    <style>
+        .popup {
+            display: none;
+        }
+    </style>
+{% endblock %}

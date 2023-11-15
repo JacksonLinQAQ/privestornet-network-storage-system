@@ -13,66 +13,69 @@
                 "path": "",
                 "fullpath": "./Privestornet/PSNUsers/Users/user",
                 "content": {
-                    "linearium.png": {
+                    "GitHubDesktopSetup-x64.exe": {
                         "pathsource": "personal",
                         "pathtype": "file",
                         "username": "user",
-                        "name": "linearium.png",
-                        "path": "linearium.png",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/linearium.png",
+                        "name": "GitHubDesktopSetup-x64.exe",
+                        "path": "GitHubDesktopSetup-x64.exe",
+                        "fullpath": "./Privestornet/PSNUsers/Users/user/GitHubDesktopSetup-x64.exe",
                         "content": null
                     },
-                    "Temp": {
+                    "\u65b0\u589e\u8cc7\u6599\u593e": {
                         "pathsource": "personal",
                         "pathtype": "folder",
                         "username": "user",
-                        "name": "Temp",
-                        "path": "Temp",
-                        "fullpath": "./Privestornet/PSNUsers/Users/user/Temp",
+                        "name": "\u65b0\u589e\u8cc7\u6599\u593e",
+                        "path": "\u65b0\u589e\u8cc7\u6599\u593e",
+                        "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e",
                         "content": {
-                            "Temp": {
+                            "\u65b0\u589e\u8cc7\u6599\u593e": {
                                 "pathsource": "personal",
                                 "pathtype": "folder",
                                 "username": "user",
-                                "name": "Temp",
-                                "path": "Temp/Temp",
-                                "fullpath": "./Privestornet/PSNUsers/Users/user/Temp/Temp",
+                                "name": "\u65b0\u589e\u8cc7\u6599\u593e",
+                                "path": "\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
+                                "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
                                 "content": {
-                                    "28-09-2023 \u4e2d\u6587\u4f5c\u6587\u2014\u2014\u57f7\u6cd5\u5b88\u6cd5\uff0c\u548c\u8ae7\u5171\u878d.pdf": {
+                                    "\u65b0\u589e\u8cc7\u6599\u593e": {
                                         "pathsource": "personal",
-                                        "pathtype": "file",
+                                        "pathtype": "folder",
                                         "username": "user",
-                                        "name": "28-09-2023 \u4e2d\u6587\u4f5c\u6587\u2014\u2014\u57f7\u6cd5\u5b88\u6cd5\uff0c\u548c\u8ae7\u5171\u878d.pdf",
-                                        "path": "Temp/Temp/28-09-2023 \u4e2d\u6587\u4f5c\u6587\u2014\u2014\u57f7\u6cd5\u5b88\u6cd5\uff0c\u548c\u8ae7\u5171\u878d.pdf",
-                                        "fullpath": "./Privestornet/PSNUsers/Users/user/Temp/Temp/28-09-2023 \u4e2d\u6587\u4f5c\u6587\u2014\u2014\u57f7\u6cd5\u5b88\u6cd5\uff0c\u548c\u8ae7\u5171\u878d.pdf",
-                                        "content": null
-                                    },
-                                    "DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_1.jpg": {
-                                        "pathsource": "personal",
-                                        "pathtype": "file",
-                                        "username": "user",
-                                        "name": "DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_1.jpg",
-                                        "path": "Temp/Temp/DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_1.jpg",
-                                        "fullpath": "./Privestornet/PSNUsers/Users/user/Temp/Temp/DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_1.jpg",
-                                        "content": null
-                                    },
-                                    "DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_2.jpg": {
-                                        "pathsource": "personal",
-                                        "pathtype": "file",
-                                        "username": "user",
-                                        "name": "DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_2.jpg",
-                                        "path": "Temp/Temp/DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_2.jpg",
-                                        "fullpath": "./Privestornet/PSNUsers/Users/user/Temp/Temp/DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_2.jpg",
-                                        "content": null
-                                    },
-                                    "DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_3.jpg": {
-                                        "pathsource": "personal",
-                                        "pathtype": "file",
-                                        "username": "user",
-                                        "name": "DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_3.jpg",
-                                        "path": "Temp/Temp/DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_3.jpg",
-                                        "fullpath": "./Privestornet/PSNUsers/Users/user/Temp/Temp/DSxwL5OjItpv8L6q5cDt5fnJ3oUqN60HsbqCeFWr_\u9875\u9762_3.jpg",
-                                        "content": null
+                                        "name": "\u65b0\u589e\u8cc7\u6599\u593e",
+                                        "path": "\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
+                                        "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
+                                        "content": {
+                                            "\u65b0\u589e\u8cc7\u6599\u593e": {
+                                                "pathsource": "personal",
+                                                "pathtype": "folder",
+                                                "username": "user",
+                                                "name": "\u65b0\u589e\u8cc7\u6599\u593e",
+                                                "path": "\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
+                                                "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
+                                                "content": {
+                                                    "\u65b0\u589e\u8cc7\u6599\u593e": {
+                                                        "pathsource": "personal",
+                                                        "pathtype": "folder",
+                                                        "username": "user",
+                                                        "name": "\u65b0\u589e\u8cc7\u6599\u593e",
+                                                        "path": "\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
+                                                        "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
+                                                        "content": {
+                                                            "\u65b0\u589e\u8cc7\u6599\u593e": {
+                                                                "pathsource": "personal",
+                                                                "pathtype": "folder",
+                                                                "username": "user",
+                                                                "name": "\u65b0\u589e\u8cc7\u6599\u593e",
+                                                                "path": "\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
+                                                                "fullpath": "./Privestornet/PSNUsers/Users/user/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e/\u65b0\u589e\u8cc7\u6599\u593e",
+                                                                "content": {}
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -102,7 +105,17 @@
                 "name": null,
                 "path": "",
                 "fullpath": "./Privestornet/PSNUsers/Users/user2",
-                "content": {}
+                "content": {
+                    "GitHubDesktopSetup-x64.exe": {
+                        "pathsource": "personal",
+                        "pathtype": "file",
+                        "username": "user2",
+                        "name": "GitHubDesktopSetup-x64.exe",
+                        "path": "GitHubDesktopSetup-x64.exe",
+                        "fullpath": "./Privestornet/PSNUsers/Users/user2/GitHubDesktopSetup-x64.exe",
+                        "content": null
+                    }
+                }
             },
             "public-data": {
                 "pathsource": "public",

@@ -4,11 +4,11 @@
 
 {% block app %}
     <a class="redirect hidden"></a>
-    <form class="upload-data-form hidden" action="./upload?dst=personal&type=file&path={{ '/'.join(path) }}" method="post" enctype="multipart/form-data">
+    <form class="upload-data-form hidden" action="./upload?dst=public&type=file&path={{ '/'.join(path) }}" method="post" enctype="multipart/form-data">
         <input type="file" name="upload-data" multiple>
         <input type="submit">
     </form>
-    <h1 class="font-bold text-[24px] mb-8">My Storage</h1>
+    <h1 class="font-bold text-[24px] mb-8">Public</h1>
     <div class="flex flex-col gap-y-[10px] flex-wrap">
         <div class="paths-container flex gap-x-[10px] items-center p-2 bg-[color:var(--theme-color-light)] rounded-[20px] max-w-full shadow-sm">
             {% if path|length >= 1 and path[0] %}
@@ -21,7 +21,7 @@
 
             <h2 class="paths font-semibold whitespace-nowrap">
                 <span>
-                    <a class="align-middle p-1 px-2 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}">Personal</a>
+                    <a class="align-middle p-1 px-2 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}">Public</a>
                     <img class="inline-block w-auto h-4 align-middle img-right-arrow">
                 </span>
 
@@ -49,7 +49,7 @@
                             {% if dt['pathtype'] == 'folder' %}
                                 <img class="inline-block w-auto h-5 img-folder align-middle">
                             {% elif '.jpg' in dt['name'] or '.png' in dt['name'] %}
-                                <img class="inline-block w-5 h-5 object-cover align-middle" src="./ficon?user={{ dt['username'] }}&target=personal&path={{ dt['path'] }}">
+                                <img class="inline-block w-5 h-5 object-cover align-middle" src="./ficon?user={{ dt['username'] }}&target=public&path={{ dt['path'] }}">
                             {% else %}
                                 <img class="inline-block w-auto h-5 img-file align-middle">
                             {% endif %}
@@ -67,7 +67,7 @@
 
 {% block popup_content %}
     <div class="flex flex-col justify-center gap-y-[10px] m-4">
-        <a class="align-middle py-1 px-4 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}">Personal</a>
+        <a class="align-middle py-1 px-4 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}">Public</a>
         {% for idx, p in path_iter %}
             {% if p %}
                 <a class="align-middle py-1 px-4 rounded-2xl hover:bg-[color:var(--theme-color-hover-highlight)] duration-300" href="./login?page={{ page }}&path={{ '/'.join(path[:idx+1]) }}">{{ p }}</a>
@@ -113,10 +113,6 @@
         <button class="move p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
             <img class="w-auto h-5 inline-block img-move align-middle">
             <span class="ml-2 align-middle">Move</span>
-        </button>
-        <button class="share p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
-            <img class="w-auto h-5 inline-block img-share align-middle">
-            <span class="ml-2 align-middle">Share</span>
         </button>
     </div>
 
@@ -306,13 +302,13 @@
 
         // Upload data event
         document.querySelector('.upload-file-btn').addEventListener('click', () => {
-            document.querySelector('.upload-data-form').action = "./upload?dst=personal&type=file&path={{ '/'.join(path) }}";
+            document.querySelector('.upload-data-form').action = "./upload?dst=public&type=file&path={{ '/'.join(path) }}";
             document.querySelector('.upload-data-form input[name="upload-data"').accept = "*";
             document.querySelector('.upload-data-form input[name="upload-data"]').click();
         })
 
         document.querySelector('.upload-folder-btn').addEventListener('click', () => {
-            document.querySelector('.upload-data-form').action = "./upload?dst=personal&type=folder&path={{ '/'.join(path) }}";
+            document.querySelector('.upload-data-form').action = "./upload?dst=public&type=folder&path={{ '/'.join(path) }}";
             document.querySelector('.upload-data-form input[name="upload-data"').accept = ".zip";
             document.querySelector('.upload-data-form input[name="upload-data"]').click();
         })
@@ -343,20 +339,20 @@
             document.querySelector('.file-info-menu').style.visibility = 'visible';
 
             document.querySelector('.file-info-menu button.view').onclick = () => {
-                redirect('./login?page=personal&path=' + e.getAttribute('filepath'));
+                redirect('./login?page=public&path=' + e.getAttribute('filepath'));
             };
 
             document.querySelector('.file-info-menu button.download').onclick = () => {
-                redirect('./login?page=personal&path=' + e.getAttribute('filepath') + '&download=1');
+                redirect('./login?page=public&path=' + e.getAttribute('filepath') + '&download=1');
             };
 
             document.querySelector('.file-info-menu button.delete').onclick = () => {
-                redirect('./delete?target=personal&path=' + e.getAttribute('filepath'));
+                redirect('./delete?target=public&path=' + e.getAttribute('filepath'));
             };
 
             document.querySelector('.file-info-menu button.move').onclick = () => {
                 // Add move parameter
-                redirect('./login?page=personal&path={{ "/".join(path) }}' + '&move=' + e.getAttribute('filepath'));
+                redirect('./login?page=public&path={{ "/".join(path) }}' + '&move=' + e.getAttribute('filepath'));
             }
 
             document.querySelector('.file-info-menu button.rename').onclick = () => {
@@ -376,7 +372,7 @@
                 document.querySelector('.file-rename').style.animation = 'expand 0.2s forwards';
                 document.querySelector('.file-rename input[type="text"]').value = e.getAttribute('filename');
                 document.querySelector('.file-rename input').style.transitionDuration = '0.2s';
-                document.querySelector('.file-rename > form').action = `./rename?target=personal&path=${e.getAttribute('filepath')}`;
+                document.querySelector('.file-rename > form').action = `./rename?target=public&path=${e.getAttribute('filepath')}`;
             }
 
             document.querySelector('.file-info-menu button.share').onclick = () => {
@@ -398,8 +394,8 @@
         document.querySelector('.file-move').style.display = 'none';
         if (move) {
             document.querySelector('.file-move').style.display = 'flex';
-            document.querySelector('.file-move > .move-target').innerHTML = 'Target: Personal:/' + move;
-            document.querySelector('.file-move > .move-dst').innerHTML = 'Destination: Personal:/{{ "/".join(path) }}';
+            document.querySelector('.file-move > .move-target').innerHTML = 'Target: public:/' + move;
+            document.querySelector('.file-move > .move-dst').innerHTML = 'Destination: public:/{{ "/".join(path) }}';
 
             if ('{{ "/".join(path) }}'.includes(move)) {
                 document.querySelector('.file-move > .move-target').style.color = 'red';
@@ -412,7 +408,7 @@
                     document.querySelector('.file-move').style.animation = 'shrink 0.3s forwards';
                     setTimeout(() => {
                         document.querySelector('.file-move').style.display = 'none';
-                        redirect(`./move?target=personal&path=${move}&dst={{ "/".join(path) }}`);
+                        redirect(`./move?target=public&path=${move}&dst={{ "/".join(path) }}`);
                     }, 100)
                 }
             }
@@ -421,7 +417,7 @@
                 document.querySelector('.file-move').style.animation = 'shrink 0.3s forwards';
                 setTimeout(() => {
                     document.querySelector('.file-move').style.display = 'none';
-                    redirect('./login?page=personal&path={{ "/".join(path) }}&move=null');
+                    redirect('./login?page=public&path={{ "/".join(path) }}&move=null');
                 }, 100)
             }
         }
@@ -431,7 +427,7 @@
         if (receive) {
             document.querySelector('.file-receive').style.display = 'flex';
             document.querySelector('.file-receive > .receive-target').innerHTML = 'Target: ' + receive;
-            document.querySelector('.file-receive > .receive-dst').innerHTML = 'Destination: Personal:/{{ "/".join(path) }}';
+            document.querySelector('.file-receive > .receive-dst').innerHTML = 'Destination: public:/{{ "/".join(path) }}';
 
 
             document.querySelector('.file-receive > div > .receive-change').onclick = () => {
@@ -446,7 +442,7 @@
                 document.querySelector('.file-receive').style.animation = 'shrink 0.3s forwards';
                 setTimeout(() => {
                     document.querySelector('.file-receive').style.display = 'none';
-                    redirect('./login?page=personal&path={{ "/".join(path) }}&receive=null');
+                    redirect('./login?page=public&path={{ "/".join(path) }}&receive=null');
                 }, 100)
             }
         }
@@ -462,7 +458,7 @@
             document.querySelector('.file-share').style.animation = 'shrink 0.3s forwards';
             setTimeout(() => {
                 document.querySelector('.file-share').style.display = 'none';
-                redirect('./login?page=personal&path={{ "/".join(path) }}');
+                redirect('./login?page=public&path={{ "/".join(path) }}');
             }, 100)
         }
     </script>
