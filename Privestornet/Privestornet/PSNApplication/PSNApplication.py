@@ -85,7 +85,7 @@ def login():
             try:
                 # If the page is not personal or public storage
                 if not (page == 'personal' or page == 'public' or page == 'shared-files'):
-                    return render_template(f'app/{page}.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page)
+                    return render_template(f'app/{page}.html', users=PSN_SYS.users, user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page)
 
                 if page == 'shared-files':
                     PSN_SYS.refresh()
@@ -154,7 +154,7 @@ def login():
 
                 # The data has been checked as a folder
                 # Return all data of the folder path
-                return render_template(f'app/{page}.html', users=PSN_SYS.users, user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, data=data, path=path, path_iter=path_iter)
+                return render_template(f'app/{page}.html', user=PSN_SYS.find_user(request.remote_addr), config=PSN_SYS.config, page=page, data=data, path=path, path_iter=path_iter)
             except TemplateNotFound:
                 return redirect('./login?page=home')
 

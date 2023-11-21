@@ -176,7 +176,7 @@ class Path:
                 return (False, 'Move function only for a root or folder location of personal or public')
 
             # If the file or folder in the destination location
-            if self.name in location_obj.content_dict.values():
+            if self.name in [c.name for c in location_obj.content_dict.values()]:
                 return (False, f'Path \'{concatpath(location_obj.path, self.name)}\' already exists')
 
             # Move the file or folder to the location
@@ -463,8 +463,7 @@ class User:
             shutil.rmtree(concatpath(PSNUSERS_USERS_DATA_PATH, self.username))
         if self in self.users.users:
             self.users.users.remove(self)
-        self.users.save_users()
-        return (True, 'OK')
+        return self.users.users
 
     def share_data(self, send_to: str, send_data: Path):
         '''
@@ -516,6 +515,7 @@ class Users:
         '''
             Load all users
         '''
+        self.users = []
         with open(PSNUSERS_USERS_CONFIG_PATH, 'r', encoding='utf-8') as f:
             users_data = json.load(f)
             for user in users_data['users']:
@@ -596,7 +596,8 @@ class Users:
         '''
         self.load_users()
         if username in self.list_usernames():
-            self.find_user(username).remove_user()
+            self.users = self.find_user(username).remove_user()
+        self.save_users()
 
     def clear_users(self):
         '''
