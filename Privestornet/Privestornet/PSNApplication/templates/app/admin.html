@@ -8,12 +8,15 @@
         <div class="users-display flex flex-col p-1 h-fit bg-[color:var(--theme-color-light)] rounded-[20px] shadow-sm max-w-full">
             <h1 class="font-bold text-[18px] m-2">Users</h1>
             {% for user in users.users %}
-                <div class="flex justify-between m-1 max-w-full">
-                    <span class="py-1 px-2 max-w-[80%] hover:bg-[color:var(--theme-color-hover-highlight)] text-ellipsis rounded-2xl duration-300 overflow-x-hidden whitespace-nowrap">
+                <div class="block m-1 p-1 hover:cursor-pointer hover:bg-[color:var(--theme-color-hover-highlight)] rounded-2xl duration-300">
+                    <span class="flex gap-x-[10px] w-full py-1 px-2 text-ellipsis rounded-2xl overflow-x-hidden whitespace-nowrap">
                         <span class="mr-2 align-middle">
-                            <img class="inline-block w-auto h-5 img-user align-middle">
+                            <img class="inline-block w-auto h-10 img-user align-middle">
                         </span>
-                        <span class="filename align-middle w-[90%]" filename="{{ user.username }}">{{ user.username }}</span>
+                        <div class="flex flex-col">
+                            <span class="align-middle w-[90%] font-bold text-[16px]" username="{{ user.username }}">{{ user.username }}</span>
+                            <span class="align-middle w-[90%] text-[12px]" isadmin="{{ user.is_administrator }}">{{ 'Administrator' if user.is_administrator else 'User' }}</span>
+                        </div>
                     </span>
                 </div>
             {% endfor %}
@@ -25,9 +28,32 @@
 {% endblock %}
 
 {% block app_extra %}
+    <div class="absolute p-1 user-info-menu rounded-tl-[20px] rounded-bl-[20px] backdrop-blur-sm duration-300 flex flex-col gap-y-[10px] bg-[color:var(--theme-color-medium)] shadow-sm">
+        <button class="view p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+            <img class="w-auto h-5 inline-block img-view align-middle">
+            <span class="ml-2 align-middle">Change Username</span>
+        </button>
+        <button class="download p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+            <img class="w-auto h-5 inline-block img-download align-middle">
+            <span class="ml-2 align-middle">Change Password</span>
+        </button>
+        <button class="delete p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+            <img class="w-auto h-5 inline-block img-delete align-middle">
+            <span class="ml-2 align-middle">Delete</span>
+        </button>
+        <button class="delete p-1 px-2 hover:bg-[color:var(--theme-color-hover-highlight)] rounded-full duration-300">
+            <img class="w-auto h-5 inline-block img-delete align-middle">
+            <span class="ml-2 align-middle">Change Permission</span>
+        </button>
+    </div>
+
     <style>
         .popup {
             display: none;
         }
     </style>
+
+    <script>
+
+    </script>
 {% endblock %}
